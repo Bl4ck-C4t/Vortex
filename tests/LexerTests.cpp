@@ -42,21 +42,19 @@ TEST_CASE( "testing types", "[variables]" ) {
             {
                 REQUIRE(scanner.yylex() == 259);
             }
+            
+        }
 
-            SECTION("symbols test correctness"){
+        SECTION("symbols test correctness"){
                 i_str << "asd 1Hello123";
-                scanner.yyrestart(&in);
                 REQUIRE(scanner.yylex() == 259);
                 REQUIRE(scanner.yylex() == 0);
 
                 i_str << "s_d_23_as_d ;AsD";
-                scanner.yyrestart(&in);
                 REQUIRE(scanner.yylex() == 259);
                 REQUIRE(scanner.yylex() == 0);
 
             }
-            
-        }
 
         
     }
