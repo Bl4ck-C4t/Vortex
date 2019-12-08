@@ -1,21 +1,30 @@
-all: Test1.cpp example.hpp
-	g++ Test1.cpp example.hpp -o res
+BASE = interpretator
+BISON = bison
+CXX = g++
+FLEX = flex
+PRECOMP = precompiled
+OUT = out
 
-deb: lexer.l
-	flex -+ -o lexer.cpp lexer.l
-	g++ lexer.cpp parser.hpp -g -o out/lexer
+all: $(BASE)
 
-#interpretator: lexer.l parser.y
+$(PRECOMP)/%.hh %.gv: %.yy
+	$(BISON) $(BISONFLAGS) --graph=graphs/$*.gv --defines=$(PRECOMP)/parser.hh -o $(PRECOMP)/$*.cc $<
 
-lex: lexer.l
-	flex -+ -o lexer.cpp lexer.l
-	g++ lexer.cpp parser.hpp -g -o lexer
-	#rm lexer.cpp
+$(PRECOMP)/%.cc: %.l
+	$(FLEX) $(FLEXFLAGS) -o $@ $<
 
-symbols: parser.y
-	bison parser.y --defines=parser.hpp -L C++
-	rm parser.tab.cc
+$(BASE): $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc main.cc driver.cc driver.hh
+	$(CXX) $^ -o $(OUT)/$@
 
-tests: tests/LexerTests.cpp lexer.l parser.y
-	flex -+ -o lexer.cpp lexer.l
-	g++ tests/LexerTests.cpp lexer.cpp parser.hpp -o out/test
+
+run: $(BASE)
+	@echo "Started:"
+	./$(OUT)/$< -
+
+
+CLEANFILES =										\
+  $(BASE) *.o										\
+  parser.hh parser.cc parser.output parser.xml parser.html parser.gv location.hh	\
+  scanner.cc
+clean:
+	rm -f $(PRECOMP)/*

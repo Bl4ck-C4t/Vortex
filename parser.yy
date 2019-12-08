@@ -5,14 +5,29 @@
 %define api.token.constructor
 %locations
 %defines
+%define parse.trace
+%define parse.error verbose
+%define api.token.prefix {TOK_}
+
+%{
+#include "../driver.hh"  
+%}
+
+
+%code requires {
+  #include <string>
+  class Driver;
+}
+
+// The parsing context.
+%param { Driver& drv }
 
 %token END_OF_FILE 0
 %token <std::string> TYPE SYMBOL;
 
 
 %code {
-  yy::parser::symbol_type yylex();
-  extern yy::location loc;
+  yy::parser::symbol_type yylex(Driver& drv);
 }
 
 %%
@@ -35,10 +50,10 @@ namespace yy
   }
 }
 
-int main ()
-{
-  std::string s = "-";
-  loc.initialize(&s);
-  yy::parser parse;
-  return parse ();
-}
+// int main ()
+// {
+//   std::string s = "-";
+//   loc.initialize(&s);
+//   yy::parser parse;
+//   return parse ();
+// }
