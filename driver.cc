@@ -1,6 +1,7 @@
 #include "driver.hh"
 
-int Driver::parse(const std::string& f){
+int 
+Driver::parse(const std::string& f){
   file = f;
   location.initialize (&file);
   scan_begin ();
@@ -10,4 +11,6 @@ int Driver::parse(const std::string& f){
   scan_end ();
   return res;
 }
+
+
 

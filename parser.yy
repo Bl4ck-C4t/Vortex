@@ -23,7 +23,7 @@
 %param { Driver& drv }
 
 %token END_OF_FILE 0
-%token <std::string> TYPE SYMBOL;
+%token <std::string> TYPE SYMBOL STRING;
 
 
 %code {

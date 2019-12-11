@@ -1,26 +1,28 @@
 BASE = interpretator
 BISON = bison
-CXX = g++
+CXX = g++ -std=c++1z
 FLEX = flex
 PRECOMP = precompiled
 OUT = out
 
 all: $(BASE)
 
-$(PRECOMP)/%.hh %.gv: %.yy
+$(PRECOMP)/%.cc $(PRECOMP)/%.hh %.gv: %.yy
 	$(BISON) $(BISONFLAGS) --graph=graphs/$*.gv --defines=$(PRECOMP)/parser.hh -o $(PRECOMP)/$*.cc $<
 
 $(PRECOMP)/%.cc: %.l
 	$(FLEX) $(FLEXFLAGS) -o $@ $<
 
 $(BASE): $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc main.cc driver.cc driver.hh
-	$(CXX) $^ -o $(OUT)/$@
+	$(CXX) $^ -o $(OUT)/$@ 
 
 
 run: $(BASE)
 	@echo "Started:"
 	./$(OUT)/$< -
 
+tests:  $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc driver.cc driver.hh tests/*.cpp
+	$(CXX) $^ -g -o $(OUT)/$@
 
 CLEANFILES =										\
   $(BASE) *.o										\

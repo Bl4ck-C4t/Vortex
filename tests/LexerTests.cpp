@@ -1,62 +1,77 @@
-#define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include <catch2/catch.hpp>
-#include "../example.hpp"
-#include "FlexLexer.h"
+#include "../driver.hh"
+#include "../precompiled/parser.hh"
 #include <iostream>
-#include <sstream>
-#include <iostream>
-#include <ostream>
+#include <string>
+#include <tuple>
 using namespace std;
 using namespace Catch::Matchers;
+// LEGACY 
+/*yy::parser::symbol_type yylex(Driver& drv);
+typedef struct yy_buffer_state* YY_BUFFER_STATE;
+YY_BUFFER_STATE yy_scan_string (const char * yystr );
+void yy_switch_to_buffer ( YY_BUFFER_STATE new_buffer  );
 
 
-TEST_CASE( "testing types", "[variables]" ) {
-    GIVEN("A basic lexer"){
-        stringstream i_str;
-        ostringstream o_str;
-        istream in(i_str.rdbuf());
-        ostream out(o_str.rdbuf());
-        yyFlexLexer scanner(&in, &out);
-    
-        SECTION("Basic test"){
-            i_str << "int a_sd bool";
-            
-            REQUIRE(scanner.yylex() == 258);
-            REQUIRE(scanner.yylex() == 259);
-            REQUIRE(scanner.yylex() == 258);
+auto generate_string_Driver(Driver& drv){
+    return [&](const char* str) {
+        auto bp = yy_scan_string(str);
+        yy_switch_to_buffer(bp);
+        auto sym = yylex(drv);
+        return sym;
+    };        
+} 
 
-        }
+auto generate_driver_tokenizer(Driver& drv){
+    return [&](){
+        return drv.get_token();
+    };
+}*/
 
-        SECTION("All types test"){
-            i_str << "int bool char float";
-            for (int i = 0; i < 4; i++)
-            {
-                REQUIRE(scanner.yylex() == 258);
-            }
-            
-        }
 
-        SECTION("symbols test"){
-            i_str << "asd Hello123 s_d_23_as_d _AsD";
-            for (int i = 0; i < 4; i++)
-            {
-                REQUIRE(scanner.yylex() == 259);
-            }
-            
-        }
 
-        SECTION("symbols test correctness"){
-                i_str << "asd 1Hello123";
-                REQUIRE(scanner.yylex() == 259);
-                REQUIRE(scanner.yylex() == 0);
+auto generate_type_checks(Driver& drv){
+    auto f1= [&drv](int expected)->void{
+        REQUIRE(drv.get_token().type_get() == expected);
+    };
+    // template<typename T>
+    auto f2= [&drv]<typename T>(T expected)->void{
+        REQUIRE(drv.get_token().value.as<T>() == expected);
+    };
 
-                i_str << "s_d_23_as_d ;AsD";
-                REQUIRE(scanner.yylex() == 259);
-                REQUIRE(scanner.yylex() == 0);
+    auto f3 = [&drv]<typename T>(int t_type, T val)->void{
+        yy::parser::symbol_type token = drv.get_token();
+        // auto s = token.value.as<T>();
+        REQUIRE(token.type_get() == t_type);
+        REQUIRE(token.value.as<T>() == val);
+    };
 
-            }
+    return make_tuple(f1, f2, f3);
+}
+
+
+TEST_CASE( "testing assingment and datatypes", "[variables]" ) {
+    Driver drv;
+    const auto& [type_checker, value_checker, t_and_v_check] = generate_type_checks(drv);
+    SECTION("A basic lexer"){
+        
+        drv.scan_string("int asd char jgkl_sdf");
+       
+        type_checker(3);
+        t_and_v_check(4, string("asd"));
+        type_checker(3);
+        t_and_v_check(4, string("jgkl_sdf"));
 
         
     }
-    //cout << o_str.str() << endl;
+
+    SECTION("String test"){
+        drv.scan_string("\"Helllo\" int 'Greetings humans' \"goodbye\"");
+
+        t_and_v_check(5, string("\"Helllo\""));
+        type_checker(3);
+        t_and_v_check(5, string("'Greetings humans'"));
+        t_and_v_check(5, string("\"goodbye\""));
+
+    }
 }
