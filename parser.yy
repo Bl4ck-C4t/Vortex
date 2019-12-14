@@ -10,7 +10,8 @@
 %define api.token.prefix {TOK_}
 
 %{
-#include "../driver.hh"  
+#include "../driver.hh"
+#include "../Variables/vars.hpp"  
 %}
 
 
@@ -24,6 +25,8 @@
 
 %token END_OF_FILE 0
 %token <std::string> TYPE SYMBOL STRING;
+%token EQUALS "="
+%token <int> INTEGER
 
 
 %code {
@@ -37,7 +40,11 @@ result:
 ;
 
 %type <std::string> decl;
-decl: TYPE SYMBOL {$$=$1+$2;}
+decl: TYPE SYMBOL "=" exp {drv.setVariable(Var(Type::INT, "asd", rvalue(Type::INT, $4))); $$="asd";}
+;
+
+%type <int> exp;
+exp: INTEGER
 ;
 
 %%

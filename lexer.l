@@ -33,6 +33,10 @@ string_v2 \"[^"]*\"
 "float" |
 "bool" {return yy::parser::make_TYPE(yytext, loc);}
 
+"=" {return yy::parser::make_EQUALS(loc);}
+
+[0-9]+ {return yy::parser::make_INTEGER(atoi(yytext), loc);}
+
 {identifier} { return yy::parser::make_SYMBOL(yytext, loc); }
 {string_v1} |
 {string_v2} {return yy::parser::make_STRING(yytext, loc);}

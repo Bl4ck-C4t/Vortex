@@ -2,25 +2,34 @@
 # define DRIVER_HH
 #include "precompiled/parser.hh"
 #include "precompiled/location.hh"
+#include "Variables/vars.hpp"
+#include <map>
 
 
 class Driver{
     std::string file;
   // Whether to generate parser debug traces.
-  bool trace_parsing = false;
-
+    std::map<std::string, Var&&> variables_;
   // Handling the scanner.
   void scan_begin ();
   void scan_end ();
   // Whether to generate scanner debug traces.
+
+  yy::location location;
+
   bool trace_scanning = false;
   // The token's location used by the scanner.
-  yy::location location;
+  bool trace_parsing = false;
 
   bool interpretatorMode = false;
 
 public:
   int parse (const std::string& f);
+
+  void setVariable(Var var);
+
+  Var getVariable(std::string name);
+
   yy::location& grabLocation() {
       return location;
   }
