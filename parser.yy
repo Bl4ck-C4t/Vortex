@@ -36,6 +36,7 @@
   SLASH   "/"
   LPAREN  "("
   RPAREN  ")"
+  SEMICOL ";"
   ;
 
 
@@ -46,30 +47,45 @@
 %%
 %start result;
 result:
-  | result exp  { std::cout << $2 << '\n'; }
+  | result exp  { drv.setLastValue(std::move($2)); std::cout << drv.getLastValue() << '\n'; }
 ;
 
 %type <rvalue> decl;
 decl: TYPE SYMBOL "=" exp {drv.setVariable(Var($1, $2, $exp)); $$=std::move($exp);}
+| SYMBOL "=" exp {drv.setVariable(Var($exp.getType(), $1, $exp)); $$=std::move($exp);}
 ;
 
 %left "+" "-";
 %left "*" "/";
+
 %type <rvalue> exp;
 exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | STRING {$$=rvalue(Type::STRING, $1);}
+| SYMBOL ";" {$$=drv.getVariable($1).getValue();}
 | decl
-| SYMBOL {$$=drv.getVariable($1).getValue();}
 ;
 
 %%
 namespace yy
 {
-    enum struct Type;
   // Report an error to the user.
   auto parser::error (const location_type& l, const std::string& msg) -> void
   {
+    std::string* arr = drv.getLastLines();
+    for(int i=0; i < 3; i++){
+      if(*(arr+i) != ""){
+        std::cerr << i + (l.begin.line - 2) << " | " << *(arr + i) << std::endl;
+      }
+    }
+    int offset = std::to_string(l.end.line).size() + 3 + (l.end.column) - 1;
+    // divide columns by 2 to find the real region
+    // pretty errors
+    for(int i=0; i < offset; i++){
+      std::cerr << "~";
+    }
+    std::cerr << "^" << '\n';
     std::cerr << l << ":" << msg << '\n';
+
   }
 }
 

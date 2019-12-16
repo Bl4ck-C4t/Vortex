@@ -1,5 +1,6 @@
 #include "driver.hh"
 #include <iomanip>
+#include <any>
 int 
 Driver::parse(const std::string& f){
   file = f;
@@ -14,8 +15,11 @@ Driver::parse(const std::string& f){
 
 void 
 Driver::setVariable(Var&& var){
-  std::cout << "setting variable" << std::endl;
-  if(var.getType() != var.getValue().getType()){
+//   std::cout << "setting variable" << std::endl;
+  const rvalue& val = var.getValue();
+  if(var.getType() != val.getType()){
+    //   int sz = std::any_cast<std::string>(val.getValue()).size();
+      location.end.column--;
     throw yy::parser::syntax_error(location, "Incorrect type");
   }
   variables_[var.getName()] = std::move(var);
@@ -26,9 +30,24 @@ Driver::getVariable(std::string name){
     if(variables_.count(name) == 0){
         throw yy::parser::syntax_error(location, "No variable with name '" + name + "'");
     }
-    std::cout << "getting variable" << std::endl;
+    // std::cout << "getting variable" << std::endl;
     return variables_[name];
 }
+
+void 
+Driver::addLine(std::string s){
+    // std::cout << "Ran with " << s << std::endl;
+    last_lines_[0] = last_lines_[1];
+    last_lines_[1] = last_lines_[2];
+    last_lines_[2] = s;
+}
+
+std::string*
+Driver::getLastLines() const{
+    return (std::string*)last_lines_;
+}
+
+
 
 
 std::ostream& operator<<(std::ostream& o, rvalue r){

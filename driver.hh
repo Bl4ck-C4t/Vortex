@@ -15,6 +15,9 @@ class Driver{
   void scan_end ();
   // Whether to generate scanner debug traces.
 
+  std::string last_lines_[3] = {"", "", ""};
+  rvalue last_returned_;
+
   yy::location location;
 
   bool trace_scanning = false;
@@ -25,6 +28,10 @@ class Driver{
 
 public:
   int parse (const std::string& f);
+
+  void addLine(std::string s);
+
+  std::string* getLastLines() const;
 
   void setVariable(Var&& var);
 
@@ -63,6 +70,14 @@ public:
 
   bool isInterpretator() const{
       return interpretatorMode;
+  }
+
+  rvalue getLastValue() const{
+      return last_returned_;
+  }
+
+  void setLastValue(rvalue&& r){
+      last_returned_ = r;
   }
   // The name of the file being parsed.
   
