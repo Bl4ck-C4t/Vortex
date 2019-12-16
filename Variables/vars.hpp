@@ -4,10 +4,11 @@
 #include <ostream>
 #include <any>
 
-enum struct Type { INT, STRING, CHAR, DOUBLE};
+enum struct Type { INT, STRING, CHAR, FLOAT, BOOL};
 
 struct rvalue{
     rvalue(Type tp, std::any vl): type(tp), value(vl) {}
+    rvalue() {}
 
     Type getType() const {
         return type;
@@ -16,6 +17,7 @@ struct rvalue{
     std::any getValue() const {
         return value;
     }
+    friend std::ostream& operator<<(std::ostream& o, rvalue r);
     private:
         Type type;
         std::any value;
@@ -25,7 +27,8 @@ struct rvalue{
 struct Var{
 
     Var(Type tp, std::string nm, rvalue r): var_type(tp), name(nm), value(r) {}
-    
+    Var() {}
+
     std::string getName() const{
         return name;
     }
@@ -34,8 +37,8 @@ struct Var{
         return var_type;
     }
 
-    std::any getValue() const {
-        return value.getValue();
+    rvalue getValue() const {
+        return value;
     }
 
     void setValue(rvalue&& n_val){

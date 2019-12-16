@@ -14,7 +14,7 @@ $(PRECOMP)/%.cc: %.l
 	$(FLEX) $(FLEXFLAGS) -o $@ $<
 
 $(BASE): $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc main.cc driver.cc driver.hh
-	$(CXX) $^ -o $(OUT)/$@ 
+	$(CXX) $^ -g -o $(OUT)/$@ 
 
 
 run: $(BASE)

@@ -9,7 +9,7 @@
 class Driver{
     std::string file;
   // Whether to generate parser debug traces.
-    std::map<std::string, Var&&> variables_;
+    std::map<std::string, Var> variables_;
   // Handling the scanner.
   void scan_begin ();
   void scan_end ();
@@ -26,7 +26,7 @@ class Driver{
 public:
   int parse (const std::string& f);
 
-  void setVariable(Var var);
+  void setVariable(Var&& var);
 
   Var getVariable(std::string name);
 

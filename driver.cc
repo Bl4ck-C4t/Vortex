@@ -1,5 +1,5 @@
 #include "driver.hh"
-
+#include <iomanip>
 int 
 Driver::parse(const std::string& f){
   file = f;
@@ -13,13 +13,21 @@ Driver::parse(const std::string& f){
 }
 
 void 
-Driver::setVariable(Var var){
+Driver::setVariable(Var&& var){
   std::cout << "setting variable" << std::endl;
+  if(var.getType() != var.getValue().getType()){
+    throw yy::parser::syntax_error(location, "Incorrect type");
+  }
+  variables_[var.getName()] = std::move(var);
 }
 
 Var 
 Driver::getVariable(std::string name){
+    if(variables_.count(name) == 0){
+        throw yy::parser::syntax_error(location, "No variable with name '" + name + "'");
+    }
     std::cout << "getting variable" << std::endl;
+    return variables_[name];
 }
 
 
@@ -28,18 +36,30 @@ std::ostream& operator<<(std::ostream& o, rvalue r){
         switch (r.getType())
             {
             case Type::INT:
-                o << std::any_cast<char>(r.getValue());
+                o << std::any_cast<int>(r.getValue());
                 break;
-                
+
             case Type::CHAR:
                 o << std::any_cast<char>(r.getValue());
+                break;
+
+            case Type::STRING:
+                o << std::any_cast<std::string>(r.getValue());
+                break;
+
+            case Type::FLOAT:
+                o << std::any_cast<float>(r.getValue());
+                break;
+
+            case Type::BOOL:
+                o << std::any_cast<bool>(r.getValue());
                 break;
             
             default:
                 break;
             }
     }catch(std::bad_any_cast e){
-        std::cout << "Bad cast";
+        o << "Bad cast";
     }
     return o;
 }

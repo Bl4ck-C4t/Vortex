@@ -6,6 +6,7 @@
 #include "parser.hh"
 #include "location.hh"
 #include "../driver.hh"
+#include "../Variables/vars.hpp"  
 #define YY_DECL yy::parser::symbol_type yylex(Driver& drv)
 #define yyterminate() return yy::parser::make_END_OF_FILE(loc)
 YY_DECL;
@@ -28,12 +29,15 @@ string_v2 \"[^"]*\"
 %}
 
 \n+        loc.lines (yyleng); loc.step ();
-"int" |
-"char" |
-"float" |
-"bool" {return yy::parser::make_TYPE(yytext, loc);}
-
-"=" {return yy::parser::make_EQUALS(loc);}
+"int" {return yy::parser::make_TYPE(Type::INT, loc);}
+"string" {return yy::parser::make_TYPE(Type::STRING, loc);}
+"-"        return yy::parser::make_MINUS  (loc);
+"+"        return yy::parser::make_PLUS   (loc);
+"*"        return yy::parser::make_STAR   (loc);
+"/"        return yy::parser::make_SLASH  (loc);
+"("        return yy::parser::make_LPAREN (loc);
+")"        return yy::parser::make_RPAREN (loc);
+"="        return yy::parser::make_EQUALS (loc);
 
 [0-9]+ {return yy::parser::make_INTEGER(atoi(yytext), loc);}
 

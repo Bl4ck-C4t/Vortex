@@ -11,12 +11,13 @@
 
 %{
 #include "../driver.hh"
-#include "../Variables/vars.hpp"  
 %}
 
 
 %code requires {
   #include <string>
+  #include <any>
+  #include "../Variables/vars.hpp"
   class Driver;
 }
 
@@ -24,9 +25,18 @@
 %param { Driver& drv }
 
 %token END_OF_FILE 0
-%token <std::string> TYPE SYMBOL STRING;
-%token EQUALS "="
-%token <int> INTEGER
+%token <Type> TYPE;
+%token <std::string> SYMBOL STRING;
+%token <int> INTEGER;
+%token
+  EQUALS "="
+  MINUS   "-"
+  PLUS    "+"
+  STAR    "*"
+  SLASH   "/"
+  LPAREN  "("
+  RPAREN  ")"
+  ;
 
 
 %code {
@@ -36,20 +46,26 @@
 %%
 %start result;
 result:
-  | result decl  { std::cout << $2 << '\n'; }
+  | result exp  { std::cout << $2 << '\n'; }
 ;
 
-%type <std::string> decl;
-decl: TYPE SYMBOL "=" exp {drv.setVariable(Var(Type::INT, "asd", rvalue(Type::INT, $4))); $$="asd";}
+%type <rvalue> decl;
+decl: TYPE SYMBOL "=" exp {drv.setVariable(Var($1, $2, $exp)); $$=std::move($exp);}
 ;
 
-%type <int> exp;
-exp: INTEGER
+%left "+" "-";
+%left "*" "/";
+%type <rvalue> exp;
+exp: INTEGER {$$=rvalue(Type::INT, $1);}
+| STRING {$$=rvalue(Type::STRING, $1);}
+| decl
+| SYMBOL {$$=drv.getVariable($1).getValue();}
 ;
 
 %%
 namespace yy
 {
+    enum struct Type;
   // Report an error to the user.
   auto parser::error (const location_type& l, const std::string& msg) -> void
   {
