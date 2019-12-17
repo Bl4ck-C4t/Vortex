@@ -41,6 +41,7 @@ float [0-9]+\.([0-9]+)?
 "float"    return yy::parser::make_TYPE   (Type::FLOAT, loc);
 "bool"     return yy::parser::make_TYPE   (Type::BOOL, loc);
 
+
 "-"        return yy::parser::make_MINUS  (loc);
 "+"        return yy::parser::make_PLUS   (loc);
 "*"        return yy::parser::make_STAR   (loc);
@@ -53,13 +54,13 @@ float [0-9]+\.([0-9]+)?
 
 [0-9]+ {return yy::parser::make_INTEGER(atoi(yytext), loc);}
 
-
 {string_v1} |
 {string_v2} {return yy::parser::make_STRING(yytext, loc);}
 
 {identifier} { return yy::parser::make_SYMBOL(yytext, loc); }
 
-[ \s\t]+ {loc.step();} 
+
+[ \t]+ {loc.step();} 
 . {throw yy::parser::syntax_error
                (loc, "invalid character: " + std::string(yytext));}
 
