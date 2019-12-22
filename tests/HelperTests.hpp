@@ -1,3 +1,6 @@
+#ifndef HELPER_FILE
+#define HELPER_FILE
+
 #include <catch2/catch.hpp>
 #include "../driver.hh"
 #include "../precompiled/parser.hh"
@@ -25,3 +28,4 @@ auto generate_type_checks(Driver& drv){
 
     return make_tuple(f1, f2, f3);
 }
+#endif

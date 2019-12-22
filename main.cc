@@ -7,9 +7,9 @@ int main(int argc, char *argv[]){
       drv.enableParserDebugMode();
     else if (argv[i] == std::string ("-s"))
       drv.enableLexerDebugMode();
-    else if (!(res = drv.parse (argv[i])))
-      std::cout << res << '\n';
     else
+      drv.interpretator();
+      // drv.parse("-");
       res = 1;
   return res;
 }

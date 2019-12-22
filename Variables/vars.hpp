@@ -3,12 +3,31 @@
 #include <iostream>
 #include <ostream>
 #include <any>
-
+#include <exception>
+// #include "../Operations/OperationExecutor.hpp"
+// #include "../Operations/SumInt.hpp"
+// #include "../Operations/SubInt.hpp"
+// #include "../Operations/MulInt.hpp"
+class OperationExecutor;
 enum struct Type { INT, STRING, CHAR, FLOAT, BOOL};
 
-struct rvalue{
-    rvalue(Type tp, std::any vl): type(tp), value(vl) {}
-    rvalue() {}
+class IncorrectTypesException {
+    std::string msg_;
+    public:
+        IncorrectTypesException(std::string msg): msg_(msg) {}
+        IncorrectTypesException(): msg_("No such operation with those types") {}
+        std::string getMessage() const {return msg_;}
+};
+class rvalue{
+    Type type;
+    std::any value;
+
+    void setupOperations();
+    public:
+    OperationExecutor* sum_exec;
+
+    rvalue(Type tp, std::any vl): type(tp), value(vl) {setupOperations();}
+    rvalue() {setupOperations();}
 
     Type getType() const {
         return type;
@@ -17,10 +36,18 @@ struct rvalue{
     std::any getValue() const {
         return value;
     }
+
+    template<class T>
+    T getValue() const{
+        return std::any_cast<T>(value);
+    }
+
     friend std::ostream& operator<<(std::ostream& o, rvalue r);
-    private:
-        Type type;
-        std::any value;
+
+    rvalue operator+(rvalue other);
+    rvalue operator-(rvalue other);
+    rvalue operator*(rvalue other);
+    // friend rvalue operator/(rvalue other, rvalue e);
     
 };
 

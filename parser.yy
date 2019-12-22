@@ -42,7 +42,9 @@
 
 %code {
   yy::parser::symbol_type yylex(Driver& drv);
+
 }
+
 
 %%
 %start result;
@@ -57,12 +59,12 @@ decl: TYPE SYMBOL "=" exp {drv.setVariable(Var($1, $2, $exp)); $$=std::move($exp
 
 %left "+" "-";
 %left "*" "/";
-
 %type <rvalue> exp;
 exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | STRING {$$=rvalue(Type::STRING, $1);}
-| SYMBOL ";" {$$=drv.getVariable($1).getValue();}
+| SYMBOL {$$=drv.getVariable($1).getValue();}
 | decl
+| exp "+" exp {try{$$= $1 + $3;} catch(IncorrectTypesException e) {throw yy::parser::syntax_error(drv.grabLocation(), "Cannot sum");}}
 ;
 
 %%
@@ -74,7 +76,7 @@ namespace yy
     std::string* arr = drv.getLastLines();
     for(int i=0; i < 3; i++){
       if(*(arr+i) != ""){
-        std::cerr << i + (l.begin.line - 2) << " | " << *(arr + i) << std::endl;
+        std::cerr << i + (l.begin.line - 1) << " | " << *(arr + i) << std::endl;
       }
     }
     int offset = std::to_string(l.end.line).size() + 3 + (l.end.column) - 1;

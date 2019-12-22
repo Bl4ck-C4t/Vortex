@@ -13,7 +13,7 @@ $(PRECOMP)/%.cc $(PRECOMP)/%.hh %.gv: %.yy
 $(PRECOMP)/%.cc: %.l
 	$(FLEX) $(FLEXFLAGS) -o $@ $<
 
-$(BASE): $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc main.cc driver.cc driver.hh
+$(BASE): $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc main.cc driver.cc driver.hh Variables/vars.cpp Operations/*.hpp
 	$(CXX) $^ -g -o $(OUT)/$@ 
 
 

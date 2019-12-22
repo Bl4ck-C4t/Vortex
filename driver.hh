@@ -29,7 +29,11 @@ class Driver{
 public:
   int parse (const std::string& f);
 
+  yy::parser createParser();
+
   void addLine(std::string s);
+
+  void interpretator();
 
   std::string* getLastLines() const;
 

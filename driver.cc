@@ -1,6 +1,14 @@
 #include "driver.hh"
 #include <iomanip>
 #include <any>
+
+template<class T>
+void shiftUp(T* arr, int elements){
+    for(int i=0; i < elements-2; i++){
+        arr[i] = arr[i+1];
+    }
+}
+
 int 
 Driver::parse(const std::string& f){
   file = f;
@@ -12,6 +20,37 @@ Driver::parse(const std::string& f){
   scan_end ();
   return res;
 }
+
+void 
+Driver::interpretator(){
+    std::string line;
+    file = "-";
+    int res;
+    do{
+        location = yy::location();
+        location.initialize ();
+        std::cout << "> ";
+        std::getline(std::cin, line);
+        this->scan_string(line.c_str());
+        // this->parse("-");
+        yy::parser parse (*this);
+        parse.set_debug_level (trace_parsing);
+        res = parse ();
+
+    }while(1);
+}
+
+yy::parser 
+Driver::createParser(){
+    location = yy::location();
+    location.initialize ();
+    return yy::parser(*this);
+
+    // parse.set_debug_level (trace_parsing);
+    // return yy::parser(parse);
+}
+
+
 
 void 
 Driver::setVariable(Var&& var){
@@ -36,6 +75,7 @@ Driver::getVariable(std::string name){
 
 void 
 Driver::addLine(std::string s){
+    // shiftUp<std::string>(last_lines_, 3);
     // std::cout << "Ran with " << s << std::endl;
     last_lines_[0] = last_lines_[1];
     last_lines_[1] = last_lines_[2];
@@ -88,5 +128,7 @@ std::ostream& operator<<(std::ostream& o, Var& var){
     << " : " << var.value;
     return o;
 }
+
+
 
 

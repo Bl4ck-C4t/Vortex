@@ -26,15 +26,12 @@ float [0-9]+\.([0-9]+)?
 
 %{
     yy::location& loc = drv.grabLocation();
-    if(drv.isInterpretator()){
-       std::cout << "> ";
-       drv.disableInterpretatorMode();
-    }
+   
     loc.columns (yyleng);
     // loc.columns (yyleng);
 %}
 ^.+$       {drv.addLine(yytext);REJECT;}
-\n+        {loc.lines (yyleng); loc.step (); drv.enableInterpretatorMode();}
+\n+        {loc.lines (yyleng); loc.step (); }
 "int"      return yy::parser::make_TYPE   (Type::INT, loc);
 "string"   return yy::parser::make_TYPE   (Type::STRING, loc);
 "char"     return yy::parser::make_TYPE   (Type::CHAR, loc);
@@ -55,7 +52,7 @@ float [0-9]+\.([0-9]+)?
 [0-9]+ {return yy::parser::make_INTEGER(atoi(yytext), loc);}
 
 {string_v1} |
-{string_v2} {return yy::parser::make_STRING(yytext, loc);}
+{string_v2} {std::string text = std::string(yytext);return yy::parser::make_STRING(text.substr(1,text.length()-2), loc);}
 
 {identifier} { return yy::parser::make_SYMBOL(yytext, loc); }
 
@@ -91,6 +88,7 @@ void
 Driver::scan_string(const char* str){
      auto bp = yy_scan_string(str);
      yy_switch_to_buffer(bp);
+     this->addLine(str);
 }
 
 yy::parser::symbol_type 
