@@ -1,11 +1,12 @@
 #include "vars.hpp"
 #include "../Operations/OperationExecutor.hpp"
-#include "../Operations/SumInt.hpp"
+#include "../Operations/IntOperations.hpp"
+#include "../Operations/SumString.hpp"
+#include "../Operations/FloatOperations.hpp"
+
+
 rvalue
 rvalue::operator+(rvalue other){
-    // if(other.getType() != this->getType()){
-    //     throw IncorrectTypesException();
-    // }
     try{
           return sum_exec->runOper(*this, other);
     }catch(IncorrectTypesException e){
@@ -13,39 +14,51 @@ rvalue::operator+(rvalue other){
     }
 }
 
+rvalue
+rvalue::operator-(rvalue other){
+    try{
+          return sub_exec->runOper(*this, other);
+    }catch(IncorrectTypesException e){
+        throw IncorrectTypesException("No '-' operator for those types");
+    }
+}
+
+rvalue
+rvalue::operator*(rvalue other){
+    try{
+          return mul_exec->runOper(*this, other);
+    }catch(IncorrectTypesException e){
+        throw IncorrectTypesException("No '*' operator for those types");
+    }
+}
+
+rvalue
+rvalue::operator/(rvalue other){
+    try{
+          return div_exec->runOper(*this, other);
+    }catch(IncorrectTypesException e){
+        throw IncorrectTypesException("No '/' operator for those types");
+    }
+}
+
+
 void 
 rvalue::setupOperations() {
         sum_exec = new OperationExecutor();
+        sub_exec = new OperationExecutor();
+        mul_exec = new OperationExecutor();
+        div_exec = new OperationExecutor();
+        
         sum_exec->addOperation(new SumInt());
-        // oe.addOperation(new SubInt());
-        // oe.addOperation(new MulInt());
-    }
+        sum_exec->addOperation(new SumString());
+        sum_exec->addOperation(new FloatSum());
 
-rvalue
-rvalue::operator-(rvalue other){
-    if(other.getType() != this->getType()){
-        throw IncorrectTypesException();
-    }
-    switch (other.getType())
-            {
-            case Type::INT:
-                return rvalue(other.getType(), this->getValue<int>() - other.getValue<int>());
-                break;
-            case Type::CHAR:
-                return rvalue(other.getType(), this->getValue<char>() - other.getValue<char>());
-                break;
-            case Type::FLOAT:
-                return rvalue(other.getType(), this->getValue<float>() - other.getValue<float>());
-                break;
-            case Type::STRING:
-                    throw IncorrectTypesException();                
-                    break;
+        sub_exec->addOperation(new SubInt());
+        sub_exec->addOperation(new FloatSub());
 
-            case Type::BOOL:
-                throw IncorrectTypesException();
+        mul_exec->addOperation(new MulInt());
+        mul_exec->addOperation(new FloatMul());
 
-            
-            default:
-                throw IncorrectTypesException();
-            }
+        div_exec->addOperation(new DivInt());
+        div_exec->addOperation(new FloatDiv());
 }

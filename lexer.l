@@ -11,7 +11,7 @@
 #define yyterminate() return yy::parser::make_END_OF_FILE(loc)
 YY_DECL;
 // #define YY_USER_ACTION loc.columns (yyleng);
-
+bool stob(std::string s);
 %}
 
 
@@ -48,8 +48,10 @@ float [0-9]+\.([0-9]+)?
 "="        return yy::parser::make_EQUALS (loc);
 ";"        return yy::parser::make_SEMICOL(loc);
 
-
-[0-9]+ {return yy::parser::make_INTEGER(atoi(yytext), loc);}
+{bool} return yy::parser::make_BOOL(stob(yytext), loc);
+{char} return yy::parser::make_CHAR(yytext[1], loc);
+{float} return yy::parser::make_FLOAT(atof(yytext), loc);
+[0-9]+ return yy::parser::make_INTEGER(atoi(yytext), loc);
 
 {string_v1} |
 {string_v2} {std::string text = std::string(yytext);return yy::parser::make_STRING(text.substr(1,text.length()-2), loc);}
@@ -62,6 +64,16 @@ float [0-9]+\.([0-9]+)?
                (loc, "invalid character: " + std::string(yytext));}
 
 %%
+bool
+stob(std::string s){
+  if(s == "true"){
+      return true;
+  }
+  else if(s == "false"){
+      return false;
+  }
+  throw std::exception();
+}
 
 void
 Driver::scan_begin ()

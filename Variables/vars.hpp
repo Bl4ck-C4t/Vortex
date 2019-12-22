@@ -11,13 +11,23 @@
 class OperationExecutor;
 enum struct Type { INT, STRING, CHAR, FLOAT, BOOL};
 
-class IncorrectTypesException {
+class ParserException {
     std::string msg_;
     public:
-        IncorrectTypesException(std::string msg): msg_(msg) {}
-        IncorrectTypesException(): msg_("No such operation with those types") {}
+        ParserException(std::string msg): msg_(msg) {}
+        ParserException(): msg_("Exception is thrown") {}
         std::string getMessage() const {return msg_;}
 };
+class IncorrectTypesException: public ParserException {
+    public:
+        IncorrectTypesException(std::string msg): ParserException(msg) {}
+        IncorrectTypesException(): ParserException("No such operation with those types") {}
+};
+class ZeroDivisionException: public ParserException {
+    public:
+        ZeroDivisionException(std::string msg): ParserException(msg) {}
+};
+
 class rvalue{
     Type type;
     std::any value;
@@ -25,6 +35,10 @@ class rvalue{
     void setupOperations();
     public:
     OperationExecutor* sum_exec;
+    OperationExecutor* sub_exec;
+    OperationExecutor* mul_exec;
+    OperationExecutor* div_exec;
+
 
     rvalue(Type tp, std::any vl): type(tp), value(vl) {setupOperations();}
     rvalue() {setupOperations();}
@@ -47,6 +61,8 @@ class rvalue{
     rvalue operator+(rvalue other);
     rvalue operator-(rvalue other);
     rvalue operator*(rvalue other);
+    rvalue operator/(rvalue other);
+    
     // friend rvalue operator/(rvalue other, rvalue e);
     
 };

@@ -8,7 +8,12 @@ int main(int argc, char *argv[]){
     else if (argv[i] == std::string ("-s"))
       drv.enableLexerDebugMode();
     else
-      drv.interpretator();
+      if(argv[i][0] == '-'){
+        drv.interpretator();
+      }
+      else{
+        drv.parse(argv[i]);
+      }
       // drv.parse("-");
       res = 1;
   return res;

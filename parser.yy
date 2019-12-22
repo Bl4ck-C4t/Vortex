@@ -28,6 +28,9 @@
 %token <Type> TYPE;
 %token <std::string> SYMBOL STRING;
 %token <int> INTEGER;
+%token <float> FLOAT;
+%token <char> CHAR;
+%token <bool> BOOL;
 %token
   EQUALS "="
   MINUS   "-"
@@ -62,9 +65,16 @@ decl: TYPE SYMBOL "=" exp {drv.setVariable(Var($1, $2, $exp)); $$=std::move($exp
 %type <rvalue> exp;
 exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | STRING {$$=rvalue(Type::STRING, $1);}
+| FLOAT {$$=rvalue(Type::FLOAT, $1);}
+| CHAR {$$=rvalue(Type::CHAR, $1);}
+| BOOL {$$=rvalue(Type::BOOL, $1);}
 | SYMBOL {$$=drv.getVariable($1).getValue();}
 | decl
-| exp "+" exp {try{$$= $1 + $3;} catch(IncorrectTypesException e) {throw yy::parser::syntax_error(drv.grabLocation(), "Cannot sum");}}
+| exp "+" exp {try{$$= $1 + $3;} catch(ParserException e) {throw yy::parser::syntax_error(drv.grabLocation(), e.getMessage());}}
+| exp "-" exp {try{$$= $1 - $3;} catch(ParserException e) {throw yy::parser::syntax_error(drv.grabLocation(), e.getMessage());}}
+| exp "*" exp {try{$$= $1 * $3;} catch(ParserException e) {throw yy::parser::syntax_error(drv.grabLocation(), e.getMessage());}}
+| exp "/" exp {try{$$= $1 / $3;} catch(ParserException e) {throw yy::parser::syntax_error(drv.grabLocation(), e.getMessage());}}
+
 ;
 
 %%
