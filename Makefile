@@ -4,6 +4,7 @@ CXX = g++ -std=c++1z
 FLEX = flex
 PRECOMP = precompiled
 OUT = out
+INTER_INCLUDES =  $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc driver.cc driver.hh Variables/vars.cpp Operations/*.hpp
 
 all: $(BASE)
 
@@ -13,7 +14,7 @@ $(PRECOMP)/%.cc $(PRECOMP)/%.hh %.gv: %.yy
 $(PRECOMP)/%.cc: %.l
 	$(FLEX) $(FLEXFLAGS) -o $@ $<
 
-$(BASE): $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc main.cc driver.cc driver.hh Variables/vars.cpp Operations/*.hpp
+$(BASE): $(INTER_INCLUDES) main.cc
 	$(CXX) $^ -g -o $(OUT)/$@ 
 
 
@@ -21,7 +22,7 @@ run: $(BASE)
 	@echo "Started:"
 	./$(OUT)/$< -
 
-tests:  $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc driver.cc driver.hh tests/*.cpp
+tests: $(INTER_INCLUDES) tests/*.cpp 
 	$(CXX) $^ -g -o $(OUT)/$@
 
 CLEANFILES =										\

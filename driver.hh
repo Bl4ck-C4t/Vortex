@@ -25,6 +25,7 @@ class Driver{
   bool trace_parsing = false;
 
   bool interpretatorMode = false;
+  bool returnLast_ = true;
 
 public:
   int parse (const std::string& f);
@@ -74,6 +75,18 @@ public:
 
   bool isInterpretator() const{
       return interpretatorMode;
+  }
+
+  void enableReturnPrint(){
+      returnLast_ = true;
+  }
+
+  void disableReturnPrint(){
+      returnLast_ = false;
+  }
+
+  bool isPrintingLastValue() const{
+      return returnLast_;
   }
 
   rvalue getLastValue() const{

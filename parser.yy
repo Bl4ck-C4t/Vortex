@@ -52,7 +52,7 @@
 %%
 %start result;
 result:
-  | result exp  { drv.setLastValue(std::move($2)); std::cout << drv.getLastValue() << '\n'; }
+  | result exp  { drv.setLastValue(std::move($2)); if(drv.isPrintingLastValue()) std::cout << drv.getLastValue() << '\n'; }
 ;
 
 %type <rvalue> decl;
