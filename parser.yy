@@ -45,6 +45,7 @@
   SEMICOL ";"
   FUNC "fn"
   RETSIGN "->"
+  RET "ret"
   ;
 
 
@@ -63,6 +64,8 @@ result:
       drv.setLastValue(std::move($2)); if(drv.isPrintingLastValue()) std::cout << ">> " << drv.getLastValue() << '\n';
     }
   }
+  | result "ret" exp {if(!$3.isStatement()) {drv.setLastValue(std::move($3));} return 0;}
+  | result "ret" {return 0;}
 ;
 
 %type <rvalue> clause;
@@ -70,24 +73,24 @@ clause: exp
 | statement {$$=rvalue();}
 
 
+
 statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE BODY[body] {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
-  | SYMBOL "(" args ")" {std::cout << "Attempting to call " << $1 << '\n';}
 
 %type <std::vector<Var>> args_d;
 args_d:
-  %empty {}
-| arg_d {$$.push_back($arg_d);}
-| args_d "," arg_d {$$.push_back($arg_d);}
+%empty {}
+|  arg_d {$$.push_back($arg_d);}
+| args_d "," arg_d {$$=$1; $$.push_back($arg_d); }
 
 %type <Var> arg_d;
 arg_d: TYPE SYMBOL {$$=Var($1, $2);}
 
 %type <std::vector<rvalue>> args;
 args:
-  %empty {}
+%empty {}
 | arg {$$.push_back($arg);}
-| args "," arg {$$.push_back($arg);}
+| args "," arg {$$=$1; $$.push_back($arg);}
 
 %type <rvalue> arg;
 arg: exp
@@ -107,10 +110,12 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | BOOL {$$=rvalue(Type::BOOL, $1);}
 | SYMBOL {$$=drv.getVariable($1).getValue();}
 | decl
-| exp "+" exp {try{$$= $1 + $3;} catch(ParserException e) {throw yy::parser::syntax_error(drv.grabLocation(), e.getMessage());}}
-| exp "-" exp {try{$$= $1 - $3;} catch(ParserException e) {throw yy::parser::syntax_error(drv.grabLocation(), e.getMessage());}}
-| exp "*" exp {try{$$= $1 * $3;} catch(ParserException e) {throw yy::parser::syntax_error(drv.grabLocation(), e.getMessage());}}
-| exp "/" exp {try{$$= $1 / $3;} catch(ParserException e) {throw yy::parser::syntax_error(drv.grabLocation(), e.getMessage());}}
+| exp "+" exp {$$= $1 + $3;}
+| exp "-" exp {$$= $1 - $3;} 
+| exp "*" exp {$$= $1 * $3;} 
+| exp "/" exp {$$= $1 / $3;}
+| SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
+
 
 ;
 

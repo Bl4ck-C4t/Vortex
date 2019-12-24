@@ -38,8 +38,9 @@ float [0-9]+\.([0-9]+)?
 "char"     return yy::parser::make_TYPE   (Type::CHAR, loc);
 "float"    return yy::parser::make_TYPE   (Type::FLOAT, loc);
 "bool"     return yy::parser::make_TYPE   (Type::BOOL, loc);
+"void"     return yy::parser::make_TYPE   (Type::VOID, loc);
 
-
+"ret"      return yy::parser::make_RET    (loc);
 "-"        return yy::parser::make_MINUS  (loc);
 "+"        return yy::parser::make_PLUS   (loc);
 "*"        return yy::parser::make_STAR   (loc);
@@ -52,7 +53,7 @@ float [0-9]+\.([0-9]+)?
 "->"       return yy::parser::make_RETSIGN(loc);  
 ","        return yy::parser::make_COMMA  (loc);  
 
-
+"{}" return yy::parser::make_BODY("", loc);
 "{"        BEGIN(BODY_S);
 <BODY_S>[^\}]* return yy::parser::make_BODY(yytext, loc);
 <BODY_S>"}" BEGIN(INITIAL);
@@ -105,12 +106,20 @@ Driver::scan_end ()
   fclose (yyin);
 }
 
-void
+YY_BUFFER_STATE
 Driver::scan_string(const char* str){
+  auto curr = YY_CURRENT_BUFFER;
      auto bp = yy_scan_string(str);
      yy_switch_to_buffer(bp);
      this->addLine(str);
+     return curr;
 }
+void 
+Driver::revertBuffer(YY_BUFFER_STATE bp){
+  yy_switch_to_buffer(bp);
+
+}
+
 
 yy::parser::symbol_type 
 Driver::get_token(){

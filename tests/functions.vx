@@ -1,4 +1,12 @@
-fn f1(int asd, char g){
-    help me please
-    just do it
+int c = 4
+fn f2() ->void {
+    1337
 }
+fn f1(int asd, char g) -> void{
+    f2()
+    int b = 4
+    b / asd
+}
+
+f1(2, 'c')
+0

@@ -4,14 +4,20 @@
 #include "precompiled/location.hh"
 #include "Variables/vars.hpp"
 #include "src/Functions/Function.hpp"
+#include "src/Utility/RefMap.hpp"
+#include "src/Functions/FunctionCall.hpp"
 #include <map>
+#include <stack>
 
+
+
+typedef struct yy_buffer_state *YY_BUFFER_STATE;
 
 class Driver{
     std::string file;
   // Whether to generate parser debug traces.
-    std::map<std::string, Var> variables_;
-    std::map<std::string, Function> functions_;
+
+    std::stack<FunctionCall> callStack_;
 
   // Handling the scanner.
   void scan_begin ();
@@ -31,7 +37,16 @@ class Driver{
   bool returnLast_ = true;
 
 public:
+  Driver() {
+      Function f = Function("main", Type::VOID, std::vector<Var>(), "");
+      FunctionCall call = FunctionCall(f);
+      callStack_.push(std::move(call));
+ }
+
+
   int parse (const std::string& f);
+
+  void executeFile(std::string filename);
 
   yy::parser createParser();
 
@@ -45,13 +60,23 @@ public:
 
   void declareFunction(Function&& f);
 
+  void callFunction(std::string name, std::vector<rvalue> args);
+
   Var getVariable(std::string name);
+
+  
+  void evaluate(const char* body);
+
+  Scope& getScope(){
+      callStack_.top().getScope();
+  }
 
   yy::location& grabLocation() {
       return location;
   }
 
-  void scan_string(const char* str);
+  YY_BUFFER_STATE scan_string(const char* str);
+  void revertBuffer(YY_BUFFER_STATE bp);
   yy::parser::symbol_type get_token();
 
   void enableParserDebugMode(){

@@ -9,7 +9,7 @@
 // #include "../Operations/SubInt.hpp"
 // #include "../Operations/MulInt.hpp"
 class OperationExecutor;
-enum struct Type { INT, STRING, CHAR, FLOAT, BOOL, VOID};
+enum struct Type { INT, STRING, CHAR, FLOAT, BOOL, VOID, FUNC};
 
 class ParserException {
     std::string msg_;
@@ -94,6 +94,11 @@ struct Var{
         value = std::move(n_val);
         var_type = n_val.getType();
     }
+
+    bool operator==(const Var other) const{
+        return other.getName() == name && other.getType() == var_type;
+    }
+    
     private:
         rvalue value;
         std::string name;
@@ -101,4 +106,6 @@ struct Var{
         friend std::ostream& operator<<(std::ostream& o, Var& var);
 
 };
+
+
 #endif

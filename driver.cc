@@ -1,12 +1,23 @@
 #include "driver.hh"
 #include <iomanip>
 #include <any>
+#include <iostream>
+#include <sstream>
+#include <fstream>
 
 template<class T>
 void shiftUp(T* arr, int elements){
     for(int i=0; i < elements-2; i++){
         arr[i] = arr[i+1];
     }
+}
+
+void 
+Driver::evaluate(const char* body){
+    auto bp = scan_string(body);
+    auto parser = createParser();
+    parser();
+    revertBuffer(bp);
 }
 
 int 
@@ -22,6 +33,15 @@ Driver::parse(const std::string& f){
 }
 
 void 
+Driver::executeFile(std::string filename){
+    std::ifstream t(filename);
+    std::stringstream buffer;
+    buffer << t.rdbuf();
+    evaluate(buffer.str().c_str());
+}
+
+
+void 
 Driver::interpretator(){
     std::string line;
     file = "-";
@@ -35,7 +55,11 @@ Driver::interpretator(){
         // this->parse("-");
         yy::parser parse (*this);
         parse.set_debug_level (trace_parsing);
-        res = parse ();
+        try{
+            res = parse ();
+        } catch(ParserException e){
+            parse.error(location, e.getMessage());
+        }
 
     }while(1);
 }
@@ -52,35 +76,61 @@ Driver::createParser(){
 
 void
 Driver::declareFunction(Function&& f){
-    if(functions_.count(f.getName())){
+    auto& functions = getScope().functions;
+    if(functions.contains(f.getName())){
         throw FunctionDefinedException("Function '" + f.getName() + "' Already defined");
     }
-    functions_[f.getName()] = std::move(f);
+    // std::string full_name = f.getName() + " " + ""
+    // rm[f.getName()];
+    functions[f.getName()] = std::move(f);
 }
+
+
+
+void 
+Driver::callFunction(std::string name, std::vector<rvalue> args){
+    auto& functions = getScope().functions;
+
+    if(!functions.contains(name)){
+        throw FunctionNotDefined("Function '" + name + "' does not exist.");
+    }
+    const Function& func = functions.get(name);
+    FunctionCall call = FunctionCall(func, std::move(args));
+    call.setRefScope(getScope());
+    callStack_.push(call);
+    evaluate(func.getBody().c_str());
+    callStack_.pop();
+    // call
+   
+    // call
+}
+
 
 
 void 
 Driver::setVariable(Var&& var){
 //   std::cout << "setting variable" << std::endl;
   const rvalue& val = var.getValue();
+  auto& variables = getScope().variables;
   if(var.getType() != val.getType()){
     //   int sz = std::any_cast<std::string>(val.getValue()).size();
       location.end.column--;
     throw yy::parser::syntax_error(location, "Incorrect type");
   }
-  if(variables_.count(var.getName())){
-      variables_[var.getName()].setValue(std::move(var.getValue()));
+  if(variables.contains(var.getName())){
+      variables[var.getName()].setValue(std::move(var.getValue()));
   }
-  variables_[var.getName()] = std::move(var);
+  variables[var.getName()] = std::move(var);
 }
 
 Var 
 Driver::getVariable(std::string name){
-    if(variables_.count(name) == 0){
+    auto& variables = getScope().variables;
+    if(!variables.contains(name)){
         throw yy::parser::syntax_error(location, "No variable with name '" + name + "'");
     }
     // std::cout << "getting variable" << std::endl;
-    return variables_[name];
+    return variables.get(name);
 }
 
 void 

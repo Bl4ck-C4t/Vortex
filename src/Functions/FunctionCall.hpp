@@ -1,0 +1,52 @@
+#ifndef FUNCTIONCALL_HH
+#define FUNCTIONCALL_HH
+#include "Function.hpp"
+#include "../Utility/RefMap.hpp"
+#include "../../Variables/vars.hpp"
+#include <vector>
+
+struct Scope{
+    RefMap<std::string, Var> variables;
+    RefMap<std::string, Function> functions;
+    Scope() {}
+};
+
+class FunctionCall {
+    const Function& fun;
+    Scope MainScope;
+
+    public:
+    FunctionCall(const Function& f): fun(f) {}
+
+    FunctionCall(const Function& f, std::vector<rvalue>&& args): FunctionCall(f) {
+
+        std::vector<Var> f_args = fun.getArgs();
+        if(f_args.size() != args.size()){
+            // cannot perform call
+        }
+
+        for(int i=0; i < f_args.size(); i++){
+            Var f_arg = f_args[i];
+            rvalue val = args[i];
+            if(f_arg.getType() != val.getType()){
+                // inccorrect values exception
+            }
+            
+            f_arg.setValue(std::move(val));
+            MainScope.variables[f_arg.getName()] = std::move(f_arg);
+        }
+    }
+
+    void setRefScope(Scope& r_scope){
+        MainScope.functions.setMap(&r_scope.functions);
+        // MainScope.variables.setMap(&r_scope.variables);
+
+    }
+
+    Scope& getScope() {
+        return MainScope;
+    }
+
+};
+
+#endif

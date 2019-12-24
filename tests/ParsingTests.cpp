@@ -50,3 +50,15 @@ TEST_CASE("Test variable creation"){
     }
 
 }
+
+TEST_CASE("Functions"){
+    Driver drv;
+    auto exec = generateExecutor(drv);
+    SECTION("Declare and run"){
+        drv.executeFile("/home/blackcat/school/Vortex/tests/function_declare.vx");
+
+        exec("f1(3, 'c')");
+
+        CHECK(drv.getLastValue().getValue<int>() == 14);
+    }
+}

@@ -1,0 +1,9 @@
+fn f1(int asd, char g, int fgh) -> int{
+    int b = 4
+    ret 10
+    b / asd
+}
+
+int a = f1(2, 'c', 2)
+a
+0
