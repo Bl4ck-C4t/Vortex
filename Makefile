@@ -4,7 +4,8 @@ CXX = g++ -std=c++1z
 FLEX = flex
 PRECOMP = precompiled
 OUT = out
-INTER_INCLUDES =  $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc driver.cc driver.hh Variables/vars.cpp Operations/*.hpp
+SOURCE = src
+INTER_INCLUDES =  $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc driver.cc driver.hh Variables/vars.cpp $(shell find $(SOURCE) -name '*.*')
 
 all: $(BASE)
 

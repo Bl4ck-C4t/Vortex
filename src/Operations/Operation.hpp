@@ -1,6 +1,6 @@
 #ifndef OPERATION_HPP
 #define OPERATION_HPP
-#include "../Variables/vars.hpp"
+#include "../../Variables/vars.hpp"
 
 class Operation{
     Type type1_;
@@ -13,4 +13,5 @@ class Operation{
         }
         virtual rvalue execute(rvalue lhs, rvalue rhs) const = 0;
 };
+
 #endif

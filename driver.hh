@@ -3,6 +3,7 @@
 #include "precompiled/parser.hh"
 #include "precompiled/location.hh"
 #include "Variables/vars.hpp"
+#include "src/Functions/Function.hpp"
 #include <map>
 
 
@@ -10,6 +11,8 @@ class Driver{
     std::string file;
   // Whether to generate parser debug traces.
     std::map<std::string, Var> variables_;
+    std::map<std::string, Function> functions_;
+
   // Handling the scanner.
   void scan_begin ();
   void scan_end ();
@@ -39,6 +42,8 @@ public:
   std::string* getLastLines() const;
 
   void setVariable(Var&& var);
+
+  void declareFunction(Function&& f);
 
   Var getVariable(std::string name);
 

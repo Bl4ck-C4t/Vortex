@@ -9,7 +9,7 @@
 // #include "../Operations/SubInt.hpp"
 // #include "../Operations/MulInt.hpp"
 class OperationExecutor;
-enum struct Type { INT, STRING, CHAR, FLOAT, BOOL};
+enum struct Type { INT, STRING, CHAR, FLOAT, BOOL, VOID};
 
 class ParserException {
     std::string msg_;
@@ -41,7 +41,7 @@ class rvalue{
 
 
     rvalue(Type tp, std::any vl): type(tp), value(vl) {setupOperations();}
-    rvalue() {setupOperations();}
+    rvalue(): type(Type::VOID), value(42) {}
 
     Type getType() const {
         return type;
@@ -49,6 +49,10 @@ class rvalue{
 
     std::any getValue() const {
         return value;
+    }
+
+    bool isStatement() const { 
+        return type == Type::VOID; 
     }
 
     template<class T>
@@ -70,6 +74,8 @@ class rvalue{
 struct Var{
 
     Var(Type tp, std::string nm, rvalue r): var_type(tp), name(nm), value(r) {}
+    Var(Type tp, std::string nm): var_type(tp), name(nm) {}
+
     Var() {}
 
     std::string getName() const{

@@ -1,8 +1,8 @@
 #include "vars.hpp"
-#include "../Operations/OperationExecutor.hpp"
-#include "../Operations/IntOperations.hpp"
-#include "../Operations/SumString.hpp"
-#include "../Operations/FloatOperations.hpp"
+#include "../src/Operations/OperationExecutor.hpp"
+#include "../src/Operations/IntOperations.hpp"
+#include "../src/Operations/SumString.hpp"
+#include "../src/Operations/FloatOperations.hpp"
 
 
 rvalue

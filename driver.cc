@@ -50,6 +50,13 @@ Driver::createParser(){
     // return yy::parser(parse);
 }
 
+void
+Driver::declareFunction(Function&& f){
+    if(functions_.count(f.getName())){
+        throw FunctionDefinedException("Function '" + f.getName() + "' Already defined");
+    }
+    functions_[f.getName()] = std::move(f);
+}
 
 
 void 
@@ -60,6 +67,9 @@ Driver::setVariable(Var&& var){
     //   int sz = std::any_cast<std::string>(val.getValue()).size();
       location.end.column--;
     throw yy::parser::syntax_error(location, "Incorrect type");
+  }
+  if(variables_.count(var.getName())){
+      variables_[var.getName()].setValue(std::move(var.getValue()));
   }
   variables_[var.getName()] = std::move(var);
 }

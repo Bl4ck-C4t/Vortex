@@ -22,6 +22,7 @@ char \'.?\'
 bool true|false
 float [0-9]+\.([0-9]+)?
 
+%x BODY_S
 %%
 
 %{
@@ -47,6 +48,14 @@ float [0-9]+\.([0-9]+)?
 ")"        return yy::parser::make_RPAREN (loc);
 "="        return yy::parser::make_EQUALS (loc);
 ";"        return yy::parser::make_SEMICOL(loc);
+"fn"       return yy::parser::make_FUNC   (loc);
+"->"       return yy::parser::make_RETSIGN(loc);  
+","        return yy::parser::make_COMMA  (loc);  
+
+
+"{"        BEGIN(BODY_S);
+<BODY_S>[^\}]* return yy::parser::make_BODY(yytext, loc);
+<BODY_S>"}" BEGIN(INITIAL);
 
 {bool} return yy::parser::make_BOOL(stob(yytext), loc);
 {char} return yy::parser::make_CHAR(yytext[1], loc);
