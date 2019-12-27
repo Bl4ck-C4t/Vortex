@@ -1,8 +1,8 @@
 #include "vars.hpp"
-#include "../src/Operations/OperationExecutor.hpp"
-#include "../src/Operations/IntOperations.hpp"
-#include "../src/Operations/SumString.hpp"
-#include "../src/Operations/FloatOperations.hpp"
+#include "../Operations/OperationExecutor.hpp"
+#include "../Operations/IntOperations.hpp"
+#include "../Operations/SumString.hpp"
+#include "../Operations/FloatOperations.hpp"
 
 
 rvalue
@@ -10,7 +10,7 @@ rvalue::operator+(rvalue other){
     try{
           return sum_exec->runOper(*this, other);
     }catch(IncorrectTypesException e){
-        throw IncorrectTypesException("No '+' operator for those types");
+        throw NoSuchOperation("+", getType(), other.getType());
     }
 }
 
@@ -19,17 +19,13 @@ rvalue::operator-(rvalue other){
     try{
           return sub_exec->runOper(*this, other);
     }catch(IncorrectTypesException e){
-        throw IncorrectTypesException("No '-' operator for those types");
+        throw NoSuchOperation("-", getType(), other.getType());
     }
 }
 
 rvalue 
 rvalue::operator-(){
-    try{
-          return sub_exec->runOper(rvalue(Type::INT, 0), *this);
-    }catch(IncorrectTypesException e){
-        throw IncorrectTypesException("No '-' operator for those types");
-    }
+    return sub_exec->runOper(rvalue(Type::INT, 0), *this);
 }
 
 
@@ -38,7 +34,7 @@ rvalue::operator*(rvalue other){
     try{
           return mul_exec->runOper(*this, other);
     }catch(IncorrectTypesException e){
-        throw IncorrectTypesException("No '*' operator for those types");
+        throw NoSuchOperation("*", getType(), other.getType());
     }
 }
 
@@ -47,7 +43,7 @@ rvalue::operator/(rvalue other){
     try{
           return div_exec->runOper(*this, other);
     }catch(IncorrectTypesException e){
-        throw IncorrectTypesException("No '/' operator for those types");
+        throw NoSuchOperation("/", getType(), other.getType());
     }
 }
 
@@ -56,7 +52,7 @@ rvalue::pow(rvalue other){
     try{
           return pow_exec->runOper(*this, other);
     }catch(IncorrectTypesException e){
-        throw IncorrectTypesException("No '**' operator for those types");
+        throw NoSuchOperation("**", getType(), other.getType());
     }
 }
 

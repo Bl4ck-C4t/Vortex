@@ -1,5 +1,5 @@
 #include <catch2/catch.hpp>
-#include "../driver.hh"
+#include "../src/Driver/driver.hh"
 #include "../precompiled/parser.hh"
 #include "HelperTests.hpp"
 #include <iostream>

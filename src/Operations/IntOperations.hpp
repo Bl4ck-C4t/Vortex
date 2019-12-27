@@ -23,8 +23,8 @@ class SubIntF: public Operation{
         SubIntF(): Operation(Type::INT, Type::FLOAT) {}
         rvalue execute(rvalue lhs, rvalue rhs) const{
             int l = lhs.getValue<int>();
-            int r = rhs.getValue<float>();
-            return rvalue(Type::INT, l - r);
+            float r = rhs.getValue<float>();
+            return rvalue(Type::FLOAT, (float)(l - r));
 
         }
 };

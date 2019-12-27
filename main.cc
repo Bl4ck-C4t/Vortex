@@ -1,6 +1,6 @@
-#include "driver.hh"
+#include "src/Driver/driver.hh"
 #include "precompiled/parser.hh"
-#include "Variables/vars.hpp"
+#include "src/Variables/vars.hpp"
 int main(int argc, char *argv[]){
     Driver drv;
     int res;

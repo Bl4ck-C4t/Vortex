@@ -1,11 +1,11 @@
 #ifndef DRIVER_HH
 # define DRIVER_HH
-#include "precompiled/parser.hh"
-#include "precompiled/location.hh"
-#include "Variables/vars.hpp"
-#include "src/Functions/Function.hpp"
-#include "src/Utility/RefMap.hpp"
-#include "src/Functions/FunctionCall.hpp"
+#include "../../precompiled/parser.hh"
+#include "../../precompiled/location.hh"
+#include "../Variables/vars.hpp"
+#include "../Functions/Function.hpp"
+#include "../Utility/RefMap.hpp"
+#include "../Functions/FunctionCall.hpp"
 #include <map>
 #include <stack>
 

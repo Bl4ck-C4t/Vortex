@@ -2,7 +2,7 @@
 #define FUNCTIONCALL_HH
 #include "Function.hpp"
 #include "../Utility/RefMap.hpp"
-#include "../../Variables/vars.hpp"
+#include "../Variables/vars.hpp"
 #include <vector>
 #include <string>
 struct Scope{

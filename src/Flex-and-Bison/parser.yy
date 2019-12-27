@@ -10,7 +10,7 @@
 %define api.token.prefix {TOK_}
 
 %{
-#include "../driver.hh"
+#include "../src/Driver/driver.hh"
 %}
 
 
@@ -18,7 +18,7 @@
   #include <string>
   #include <any>
   #include <vector>
-  #include "../Variables/vars.hpp"
+  #include "../src/Variables/vars.hpp"
   #include "../src/Functions/Function.hpp"
   class Driver;
 }

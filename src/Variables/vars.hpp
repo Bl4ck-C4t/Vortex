@@ -30,6 +30,14 @@ class IncorrectTypesException: public ParserException {
         ParserException(msg + ":\n      expected '" + typeToString(expected) + "', got '" + typeToString(actual) + "'") {}
         IncorrectTypesException(): ParserException("No such operation with those types") {}
 };
+
+class NoSuchOperation: public ParserException{
+ public:
+        NoSuchOperation(std::string msg): ParserException(msg) {}
+        NoSuchOperation(std::string operation, const Type& lhs, const Type& rhs):
+        ParserException("No '" + operation + "' operator for " + typeToString(lhs) + " " + operation + " " + typeToString(rhs)) {}
+        NoSuchOperation(): ParserException("No such operation with those types") {}
+};
 class ZeroDivisionException: public ParserException {
     public:
         ZeroDivisionException(std::string msg): ParserException(msg) {}

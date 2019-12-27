@@ -2,7 +2,7 @@
 #define FUNCTION_HPP
 #include <string>
 #include <vector>
-#include "../../Variables/vars.hpp"
+#include "../Variables/vars.hpp"
 
 class FunctionDefinedException: public ParserException{
     public:

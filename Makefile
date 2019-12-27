@@ -5,15 +5,16 @@ FLEX = flex
 PRECOMP = precompiled
 OUT = out
 SOURCE = src
-INTER_INCLUDES =  $(PRECOMP)/parser.hh $(PRECOMP)/parser.cc $(PRECOMP)/lexer.cc driver.cc driver.hh Variables/vars.cpp $(shell find $(SOURCE) -name '*.*')
+INTER_INCLUDES =  $(PRECOMP)/parser.cc $(PRECOMP)/parser.hh $(PRECOMP)/lexer.cc \
+$(shell find $(SOURCE) -path $(SOURCE)/Flex-and-Bison -prune -o -name '*.*' -print)
 
 all: $(BASE)
 
-$(PRECOMP)/%.cc $(PRECOMP)/%.hh %.gv: %.yy
-	$(BISON) $(BISONFLAGS) --graph=graphs/$*.gv --defines=$(PRECOMP)/parser.hh -o $(PRECOMP)/$*.cc $<
+$(PRECOMP)/%.cc $(PRECOMP)/%.hh %.gv: $(SOURCE)/Flex-and-Bison/*.yy
+	$(BISON) $(BISONFLAGS) --graph=graphs/$*.gv --defines=$(PRECOMP)/parser.hh -o $(PRECOMP)/parser.cc $<
 
-$(PRECOMP)/%.cc: %.l
-	$(FLEX) $(FLEXFLAGS) -o $@ $<
+$(PRECOMP)/lexer.cc: $(SOURCE)/Flex-and-Bison/*.l
+	$(FLEX) $(FLEXFLAGS) -o $(PRECOMP)/lexer.cc $<
 
 $(BASE): $(INTER_INCLUDES) main.cc
 	$(CXX) $^ -g -o $(OUT)/$@ 
