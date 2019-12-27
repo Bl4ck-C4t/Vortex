@@ -18,6 +18,17 @@ class SubInt: public IntOper{
         } 
 };
 
+class SubIntF: public Operation{
+    public:
+        SubIntF(): Operation(Type::INT, Type::FLOAT) {}
+        rvalue execute(rvalue lhs, rvalue rhs) const{
+            int l = lhs.getValue<int>();
+            int r = rhs.getValue<float>();
+            return rvalue(Type::INT, l - r);
+
+        }
+};
+
 class MulInt: public IntOper{
     public:
         MulInt(): IntOper(Type::INT, Type::INT) {}
@@ -35,6 +46,14 @@ class DivInt: public IntOper{
                 throw ZeroDivisionException("Attempted zero division with ints");
             }
             return lhs / rhs;
+        } 
+};
+
+class PowInt: public IntOper{
+    public:
+        PowInt(): IntOper(Type::INT, Type::INT) {}
+        int calculate(int lhs, int rhs) const{
+            return std::pow((float)lhs, (float)rhs);
         } 
 };
 #endif

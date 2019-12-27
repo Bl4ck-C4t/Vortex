@@ -11,16 +11,23 @@
 class OperationExecutor;
 enum struct Type { INT, STRING, CHAR, FLOAT, BOOL, VOID, FUNC};
 
-class ParserException {
+std::string typeToString(Type tp);
+
+class ParserException: public std::exception {
     std::string msg_;
     public:
         ParserException(std::string msg): msg_(msg) {}
         ParserException(): msg_("Exception is thrown") {}
         std::string getMessage() const {return msg_;}
+        const char* what() const noexcept {
+            return getMessage().c_str();
+        }
 };
 class IncorrectTypesException: public ParserException {
     public:
         IncorrectTypesException(std::string msg): ParserException(msg) {}
+        IncorrectTypesException(std::string msg, const Type& expected, const Type& actual):
+        ParserException(msg + ":\n      expected '" + typeToString(expected) + "', got '" + typeToString(actual) + "'") {}
         IncorrectTypesException(): ParserException("No such operation with those types") {}
 };
 class ZeroDivisionException: public ParserException {
@@ -38,6 +45,7 @@ class rvalue{
     OperationExecutor* sub_exec;
     OperationExecutor* mul_exec;
     OperationExecutor* div_exec;
+    OperationExecutor* pow_exec;
 
 
     rvalue(Type tp, std::any vl): type(tp), value(vl) {setupOperations();}
@@ -64,8 +72,10 @@ class rvalue{
 
     rvalue operator+(rvalue other);
     rvalue operator-(rvalue other);
+    rvalue operator-();
     rvalue operator*(rvalue other);
     rvalue operator/(rvalue other);
+    rvalue pow(rvalue other);
     
     // friend rvalue operator/(rvalue other, rvalue e);
     

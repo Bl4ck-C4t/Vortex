@@ -36,4 +36,13 @@ class FloatDiv: public FloatOper{
             return lhs / rhs;
         } 
 };
+
+class FloatPow: public FloatOper{
+    public:
+        FloatPow(): FloatOper(Type::FLOAT, Type::FLOAT) {}
+        float calculate(float lhs, float rhs) const{
+            return std::pow(lhs, rhs);
+
+        } 
+};
 #endif

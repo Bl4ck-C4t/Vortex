@@ -99,6 +99,10 @@ Driver::callFunction(std::string name, std::vector<rvalue> args){
     call.setRefScope(getScope());
     callStack_.push(call);
     evaluate(func.getBody().c_str());
+    if(getLastValue().getType() != func.getType()){
+        throw IncorrectTypesException("The type returned from function '" + func.getName() + "' is incorrect", 
+        func.getType(), getLastValue().getType());
+    }
     callStack_.pop();
     // call
    
@@ -115,7 +119,7 @@ Driver::setVariable(Var&& var){
   if(var.getType() != val.getType()){
     //   int sz = std::any_cast<std::string>(val.getValue()).size();
       location.end.column--;
-    throw yy::parser::syntax_error(location, "Incorrect type");
+    throw IncorrectTypesException("Value type incorrect", var.getType(), val.getType());
   }
   if(variables.contains(var.getName())){
       variables[var.getName()].setValue(std::move(var.getValue()));

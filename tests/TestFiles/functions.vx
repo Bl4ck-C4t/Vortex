@@ -7,6 +7,6 @@ fn f1(int asd, char g) -> void{
     int b = 4
     b / asd
 }
-
-f1(2, 'c')
+ret;
+f1(2, true)
 0

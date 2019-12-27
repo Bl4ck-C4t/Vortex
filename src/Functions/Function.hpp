@@ -22,7 +22,7 @@ class Function: public Var{
 
    public:
     Function(std::string nm, Type r_type, std::vector<Var>&& vec, std::string body):
-     ret_type_(r_type), arg_list_(std::move(vec)), Var(Type::FUNC, nm, rvalue(Type::STRING, body)) {}
+     ret_type_(r_type), arg_list_(std::move(vec)), Var(r_type, nm, rvalue(Type::STRING, body)) {}
 
     Function() {}
 

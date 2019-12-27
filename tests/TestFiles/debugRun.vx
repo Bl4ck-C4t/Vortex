@@ -1,0 +1,15 @@
+fn f1(int asd, char g, int fgh) -> int{
+    int b = 4;
+    ret 10
+    b / asd
+}
+
+fn f2() -> void {
+    30
+    ret;
+}
+
+int a = f1(2, 'c', 2);
+int b = f2();
+a
+0

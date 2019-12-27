@@ -1,6 +1,7 @@
 #ifndef OPERATION_HPP
 #define OPERATION_HPP
 #include "../../Variables/vars.hpp"
+#include <cmath>
 
 class Operation{
     Type type1_;

@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${workspaceFolder}/out/interpretator",
-            "args": ["${workspaceFolder}/tests/debugRun.vx"],
+            "args": ["${workspaceFolder}/tests/TestFiles/debugRun.vx"],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",
             "environment": [],

@@ -64,8 +64,8 @@ result:
       drv.setLastValue(std::move($2)); if(drv.isPrintingLastValue()) std::cout << ">> " << drv.getLastValue() << '\n';
     }
   }
-  | result "ret" exp {if(!$3.isStatement()) {drv.setLastValue(std::move($3));} return 0;}
-  | result "ret" {return 0;}
+  | result "ret" exp {drv.setLastValue(std::move($3)); return 0;}
+  | result "ret" ";" {drv.setLastValue(std::move(rvalue()));return 0;}
 ;
 
 %type <rvalue> clause;
@@ -96,12 +96,14 @@ args:
 arg: exp
 
 %type <rvalue> decl;
-decl: TYPE SYMBOL "=" exp {drv.setVariable(Var($1, $2, $exp)); $$=std::move($exp);}
-| SYMBOL "=" exp {drv.setVariable(Var($exp.getType(), $1, $exp)); $$=std::move($exp);}
+decl: TYPE SYMBOL "=" exp ";" {drv.setVariable(Var($1, $2, $exp)); $$=std::move($exp);}
+| SYMBOL "=" exp ";" {drv.setVariable(Var($exp.getType(), $1, $exp)); $$=std::move($exp);}
 ;
 
 %left "+" "-";
 %left "*" "/";
+%precedence NEG;
+
 %type <rvalue> exp;
 exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | STRING {$$=rvalue(Type::STRING, $1);}
@@ -110,10 +112,12 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | BOOL {$$=rvalue(Type::BOOL, $1);}
 | SYMBOL {$$=drv.getVariable($1).getValue();}
 | decl
+| exp[base] "*" "*" exp[power] {$$=$base.pow($power);}
 | exp "+" exp {$$= $1 + $3;}
 | exp "-" exp {$$= $1 - $3;} 
 | exp "*" exp {$$= $1 * $3;} 
 | exp "/" exp {$$= $1 / $3;}
+| "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
 
 
