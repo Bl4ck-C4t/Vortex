@@ -34,6 +34,12 @@
 %token <char> CHAR;
 %token <bool> BOOL;
 %token
+  COMPARE "=="
+  GREATER ">"
+  LESS "<"
+  DIFFERENT "!="
+  GREATEREQUAL ">="
+  SMALLEREQUAL "<="
   EQUALS "="
   MINUS   "-"
   PLUS    "+"
@@ -117,6 +123,7 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "-" exp {$$= $1 - $3;} 
 | exp "*" exp {$$= $1 * $3;} 
 | exp "/" exp {$$= $1 / $3;}
+| exp "==" exp {$$=$1 == $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
 

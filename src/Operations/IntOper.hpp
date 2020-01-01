@@ -4,7 +4,7 @@
 
 class IntOper: public Operation{
     public:
-        IntOper(Type tp, Type tp2): Operation(tp, tp2) {}
+        IntOper(Type tp, Type tp2, std::string oper): Operation(tp, tp2, oper) {}
 
         rvalue execute(rvalue lhs, rvalue rhs) const{
             int l = lhs.getValue<int>();

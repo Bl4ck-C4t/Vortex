@@ -4,7 +4,7 @@
 
 class SumInt: public IntOper{
     public:
-        SumInt(): IntOper(Type::INT, Type::INT) {}
+        SumInt(): IntOper(Type::INT, Type::INT, "+") {}
         int calculate(int lhs, int rhs) const{
             return lhs + rhs;
         } 
@@ -12,7 +12,7 @@ class SumInt: public IntOper{
 
 class SubInt: public IntOper{
     public:
-        SubInt(): IntOper(Type::INT, Type::INT) {}
+        SubInt(): IntOper(Type::INT, Type::INT, "-") {}
         int calculate(int lhs, int rhs) const{
             return lhs - rhs;
         } 
@@ -20,7 +20,7 @@ class SubInt: public IntOper{
 
 class SubIntF: public Operation{
     public:
-        SubIntF(): Operation(Type::INT, Type::FLOAT) {}
+        SubIntF(): Operation(Type::INT, Type::FLOAT, "-") {}
         rvalue execute(rvalue lhs, rvalue rhs) const{
             int l = lhs.getValue<int>();
             float r = rhs.getValue<float>();
@@ -31,7 +31,7 @@ class SubIntF: public Operation{
 
 class MulInt: public IntOper{
     public:
-        MulInt(): IntOper(Type::INT, Type::INT) {}
+        MulInt(): IntOper(Type::INT, Type::INT, "*") {}
         int calculate(int lhs, int rhs) const{
             return lhs * rhs;
         } 
@@ -40,7 +40,7 @@ class MulInt: public IntOper{
 
 class DivInt: public IntOper{
     public:
-        DivInt(): IntOper(Type::INT, Type::INT) {}
+        DivInt(): IntOper(Type::INT, Type::INT, "/") {}
         int calculate(int lhs, int rhs) const{
             if(rhs == 0){
                 throw ZeroDivisionException("Attempted zero division with ints");
@@ -51,7 +51,7 @@ class DivInt: public IntOper{
 
 class PowInt: public IntOper{
     public:
-        PowInt(): IntOper(Type::INT, Type::INT) {}
+        PowInt(): IntOper(Type::INT, Type::INT, "**") {}
         int calculate(int lhs, int rhs) const{
             return std::pow((float)lhs, (float)rhs);
         } 

@@ -49,11 +49,12 @@ class rvalue{
 
     void setupOperations();
     public:
-    OperationExecutor* sum_exec;
-    OperationExecutor* sub_exec;
-    OperationExecutor* mul_exec;
-    OperationExecutor* div_exec;
-    OperationExecutor* pow_exec;
+    OperationExecutor* operations;
+    // OperationExecutor* sum_exec;
+    // OperationExecutor* sub_exec;
+    // OperationExecutor* mul_exec;
+    // OperationExecutor* div_exec;
+    // OperationExecutor* pow_exec;
 
 
     rvalue(Type tp, std::any vl): type(tp), value(vl) {setupOperations();}
@@ -83,6 +84,7 @@ class rvalue{
     rvalue operator-();
     rvalue operator*(rvalue other);
     rvalue operator/(rvalue other);
+    rvalue operator==(rvalue other);
     rvalue pow(rvalue other);
     
     // friend rvalue operator/(rvalue other, rvalue e);

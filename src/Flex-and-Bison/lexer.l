@@ -40,7 +40,13 @@ float [0-9]+\.([0-9]+)?
 "bool"     return yy::parser::make_TYPE   (Type::BOOL, loc);
 "void"     return yy::parser::make_TYPE   (Type::VOID, loc);
 
-"ret"      return yy::parser::make_RET    (loc);
+"=="       return yy::parser::make_COMPARE         (loc);
+">"        return yy::parser::make_GREATER         (loc);
+"<"        return yy::parser::make_LESS            (loc);
+">="       return yy::parser::make_GREATEREQUAL    (loc);
+"<="       return yy::parser::make_SMALLEREQUAL    (loc);
+"!="       return yy::parser::make_DIFFERENT       (loc);
+
 "-"        return yy::parser::make_MINUS  (loc);
 "+"        return yy::parser::make_PLUS   (loc);
 "*"        return yy::parser::make_STAR   (loc);
@@ -52,8 +58,10 @@ float [0-9]+\.([0-9]+)?
 "fn"       return yy::parser::make_FUNC   (loc);
 "->"       return yy::parser::make_RETSIGN(loc);  
 ","        return yy::parser::make_COMMA  (loc);  
+"ret"      return yy::parser::make_RET    (loc);
 
-"{}" return yy::parser::make_BODY("", loc);
+
+"{}"       return yy::parser::make_BODY   ("", loc);
 "{"        BEGIN(BODY_S);
 <BODY_S>[^\}]* return yy::parser::make_BODY(yytext, loc);
 <BODY_S>"}" BEGIN(INITIAL);

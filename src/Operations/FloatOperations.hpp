@@ -4,7 +4,7 @@
 
 class FloatSum: public FloatOper{
     public:
-        FloatSum(): FloatOper(Type::FLOAT, Type::FLOAT) {}
+        FloatSum(): FloatOper(Type::FLOAT, Type::FLOAT, "+") {}
         float calculate(float lhs, float rhs) const{
             return lhs + rhs;
         } 
@@ -12,7 +12,7 @@ class FloatSum: public FloatOper{
 
 class FloatSub: public FloatOper{
     public:
-        FloatSub(): FloatOper(Type::FLOAT, Type::FLOAT) {}
+        FloatSub(): FloatOper(Type::FLOAT, Type::FLOAT, "-") {}
         float calculate(float lhs, float rhs) const{
             return lhs - rhs;
         } 
@@ -20,7 +20,7 @@ class FloatSub: public FloatOper{
 
 class FloatMul: public FloatOper{
     public:
-        FloatMul(): FloatOper(Type::FLOAT, Type::FLOAT) {}
+        FloatMul(): FloatOper(Type::FLOAT, Type::FLOAT, "*") {}
         float calculate(float lhs, float rhs) const{
             return lhs * rhs;
         } 
@@ -28,7 +28,7 @@ class FloatMul: public FloatOper{
 
 class FloatDiv: public FloatOper{
     public:
-        FloatDiv(): FloatOper(Type::FLOAT, Type::FLOAT) {}
+        FloatDiv(): FloatOper(Type::FLOAT, Type::FLOAT, "/") {}
         float calculate(float lhs, float rhs) const{
             if(rhs == 0.0){
                 throw ZeroDivisionException("Attempted zero division with floats");
@@ -39,7 +39,7 @@ class FloatDiv: public FloatOper{
 
 class FloatPow: public FloatOper{
     public:
-        FloatPow(): FloatOper(Type::FLOAT, Type::FLOAT) {}
+        FloatPow(): FloatOper(Type::FLOAT, Type::FLOAT, "**") {}
         float calculate(float lhs, float rhs) const{
             return std::pow(lhs, rhs);
 

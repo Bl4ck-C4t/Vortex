@@ -14,9 +14,9 @@ class OperationExecutor{
         operations_.push_back(oper);
     }
 
-    rvalue runOper(rvalue lhs, rvalue rhs) const{
+    rvalue runOper(rvalue lhs, rvalue rhs, std::string oper) const{
         for(auto it = operations_.begin(); it != operations_.end(); it++ ){
-            if((*it)->match(lhs, rhs)){
+            if((*it)->match(lhs, rhs, oper)){
                 return (*it)->execute(lhs, rhs);
             }
         }
