@@ -52,6 +52,7 @@
   FUNC "fn"
   RETSIGN "->"
   RET "ret"
+  IF "if"
   ;
 
 
@@ -77,30 +78,35 @@ result:
 %type <rvalue> clause;
 clause: exp
 | statement {$$=rvalue();}
-
+;
 
 
 statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE BODY[body] {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
-  
+| "if" "(" bool_exp ")" BODY[body] { if($bool_exp.getValue<bool>()){ drv.evaluate($body.c_str());    } }
+;
 
 %type <std::vector<Var>> args_d;
 args_d:
 %empty {}
 |  arg_d {$$.push_back($arg_d);}
 | args_d "," arg_d {$$=$1; $$.push_back($arg_d); }
+;
 
 %type <Var> arg_d;
 arg_d: TYPE SYMBOL {$$=Var($1, $2);}
+;
 
 %type <std::vector<rvalue>> args;
 args:
 %empty {}
 | arg {$$.push_back($arg);}
 | args "," arg {$$=$1; $$.push_back($arg);}
+;
 
 %type <rvalue> arg;
 arg: exp
+;
 
 %type <rvalue> decl;
 decl: TYPE SYMBOL "=" exp ";" {drv.setVariable(Var($1, $2, $exp)); $$=std::move($exp);}
@@ -116,7 +122,6 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | STRING {$$=rvalue(Type::STRING, $1);}
 | FLOAT {$$=rvalue(Type::FLOAT, $1);}
 | CHAR {$$=rvalue(Type::CHAR, $1);}
-| BOOL {$$=rvalue(Type::BOOL, $1);}
 | SYMBOL {$$=drv.getVariable($1).getValue();}
 | decl
 | exp[base] "*" "*" exp[power] {$$=$base.pow($power);}
@@ -131,12 +136,14 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 
 %left "==" ">" "<" ">=" "<=" "!=";
 %type <rvalue> bool_exp;
-bool_exp: exp "==" exp {$$=$1 == $3;}
+bool_exp:
+ exp "==" exp {$$=$1 == $3;}
 | exp ">" exp {$$=$1 > $3;}
 | exp "<" exp {$$=$1 < $3;}
 | exp ">=" exp {$$=$1 >= $3;}
 | exp "<=" exp {$$=$1 <= $3;}
 | exp "!=" exp {$$=$1 != $3;}
+| BOOL {$$=rvalue(Type::BOOL, $1);}
 ;
 
 %%

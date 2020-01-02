@@ -16,6 +16,8 @@ void
 Driver::evaluate(const char* body){
     auto bp = scan_string(body);
     auto parser = createParser();
+    parser.set_debug_level (trace_parsing);
+
     parser();
     revertBuffer(bp);
 }
@@ -109,6 +111,8 @@ Driver::callFunction(std::string name, std::vector<rvalue> args){
     // call
 }
 
+// if (true) { 20 }
+
 
 
 void 
@@ -140,7 +144,7 @@ Driver::getVariable(std::string name){
 void 
 Driver::addLine(std::string s){
     // shiftUp<std::string>(last_lines_, 3);
-    // std::cout << "Ran with " << s << std::endl;
+    // std::cout << "Ran with " << s << std::endl; 
     last_lines_[0] = last_lines_[1];
     last_lines_[1] = last_lines_[2];
     last_lines_[2] = s;

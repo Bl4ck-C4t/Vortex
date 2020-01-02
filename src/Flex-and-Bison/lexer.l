@@ -40,6 +40,7 @@ float [0-9]+\.([0-9]+)?
 "bool"     return yy::parser::make_TYPE   (Type::BOOL, loc);
 "void"     return yy::parser::make_TYPE   (Type::VOID, loc);
 
+"if"       return yy::parser::make_IF              (loc);
 "=="       return yy::parser::make_COMPARE         (loc);
 ">"        return yy::parser::make_GREATER         (loc);
 "<"        return yy::parser::make_LESS            (loc);
@@ -63,7 +64,7 @@ float [0-9]+\.([0-9]+)?
 
 "{}"       return yy::parser::make_BODY   ("", loc);
 "{"        BEGIN(BODY_S);
-<BODY_S>[^\}]* return yy::parser::make_BODY(yytext, loc);
+<BODY_S>[^\}]*  return yy::parser::make_BODY(yytext, loc);
 <BODY_S>"}" BEGIN(INITIAL);
 
 {bool} return yy::parser::make_BOOL(stob(yytext), loc);
