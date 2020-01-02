@@ -79,6 +79,12 @@ class rvalue{
     rvalue operator*(rvalue other);
     rvalue operator/(rvalue other);
     rvalue operator==(rvalue other);
+    rvalue operator>(rvalue other);
+    rvalue operator<(rvalue other);
+    rvalue operator>=(rvalue other);
+    rvalue operator<=(rvalue other);
+    rvalue operator!=(rvalue other);
+
     rvalue pow(rvalue other);
     
     // friend rvalue operator/(rvalue other, rvalue e);

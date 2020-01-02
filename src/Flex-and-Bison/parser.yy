@@ -82,6 +82,7 @@ clause: exp
 
 statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE BODY[body] {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
+  
 
 %type <std::vector<Var>> args_d;
 args_d:
@@ -123,11 +124,19 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "-" exp {$$= $1 - $3;} 
 | exp "*" exp {$$= $1 * $3;} 
 | exp "/" exp {$$= $1 / $3;}
-| exp "==" exp {$$=$1 == $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
+| bool_exp
+;
 
-
+%left "==" ">" "<" ">=" "<=" "!=";
+%type <rvalue> bool_exp;
+bool_exp: exp "==" exp {$$=$1 == $3;}
+| exp ">" exp {$$=$1 > $3;}
+| exp "<" exp {$$=$1 < $3;}
+| exp ">=" exp {$$=$1 >= $3;}
+| exp "<=" exp {$$=$1 <= $3;}
+| exp "!=" exp {$$=$1 != $3;}
 ;
 
 %%
