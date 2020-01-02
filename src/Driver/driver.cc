@@ -156,6 +156,7 @@ Driver::getLastLines() const{
 
 std::ostream& operator<<(std::ostream& o, rvalue r){
     try{
+        std::string res;
         switch (r.getType())
             {
             case Type::INT:
@@ -175,7 +176,8 @@ std::ostream& operator<<(std::ostream& o, rvalue r){
                 break;
 
             case Type::BOOL:
-                o << std::any_cast<bool>(r.getValue());
+                res = std::any_cast<bool>(r.getValue()) ? "true" : "false";
+                o << res;
                 break;
             
             default:

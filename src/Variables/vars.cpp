@@ -3,6 +3,7 @@
 #include "../Operations/IntOperations.hpp"
 #include "../Operations/SumString.hpp"
 #include "../Operations/FloatOperations.hpp"
+#include "../Operations/BoolNumOperations.hpp"
 
 
 rvalue
@@ -59,7 +60,7 @@ rvalue::pow(rvalue other){
 rvalue 
 rvalue::operator==(rvalue other){
     try{
-          return operations->runOper(*this, other, "*");
+          return operations->runOper(*this, other, "==");
     }catch(IncorrectTypesException e){
         throw NoSuchOperation("==", getType(), other.getType());
     }
@@ -89,6 +90,9 @@ rvalue::setupOperations() {
 
         operations->addOperation(new PowInt());
         operations->addOperation(new FloatPow());
+
+        operations->addOperation(new CompareNumsBool());
+        
 
 }
 

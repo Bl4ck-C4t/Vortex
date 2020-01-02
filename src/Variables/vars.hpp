@@ -50,12 +50,6 @@ class rvalue{
     void setupOperations();
     public:
     OperationExecutor* operations;
-    // OperationExecutor* sum_exec;
-    // OperationExecutor* sub_exec;
-    // OperationExecutor* mul_exec;
-    // OperationExecutor* div_exec;
-    // OperationExecutor* pow_exec;
-
 
     rvalue(Type tp, std::any vl): type(tp), value(vl) {setupOperations();}
     rvalue(): type(Type::VOID), value(42) {}
