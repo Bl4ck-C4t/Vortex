@@ -20,9 +20,9 @@ class RefMap{
             return mainMap_[key];
         }
 
-        const B& get(A&& key){
+         B& get(A&& key){
             if(mainMap_.count(key) == 0){
-                if(refMap_ != nullptr || refMap_->count(key) == 0){
+                if(refMap_ != nullptr || !(refMap_->contains(key))){
                     //
                 }
                 return (*refMap_).get(key);
@@ -30,9 +30,9 @@ class RefMap{
             return mainMap_[key];
         }
 
-        const B& get(A& key){
+         B& get(A& key){
             if(mainMap_.count(key) == 0){
-                if(refMap_ != nullptr || refMap_->contains(key) == 0){
+                if(refMap_ != nullptr || !(refMap_->contains(key))){
                     //
                 }
                 return (*refMap_).get(key);

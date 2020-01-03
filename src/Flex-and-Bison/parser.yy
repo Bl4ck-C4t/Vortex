@@ -73,8 +73,8 @@ result:
       drv.setLastValue(std::move($2)); if(drv.isPrintingLastValue()) std::cout << ">> " << drv.getLastValue() << '\n';
     }
   }
-  | result "ret" exp ";" {drv.setLastValue(std::move($3)); return 0;}
-  | result "ret" ";" {drv.setLastValue(std::move(rvalue()));return 0;}
+  | result "ret" exp ";" {drv.setLastValue(std::move($3)); return 2;}
+  | result "ret" ";" {drv.setLastValue(std::move(rvalue()));return 2;}
 ;
 
 %type <rvalue> clause;
@@ -85,14 +85,21 @@ clause: exp
 
 statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
-| "if" "(" bool_exp ")" "{" body "}" { if($bool_exp.getValue<bool>()){ drv.runConditional($body);  } }
+| "if" "(" bool ")" "{" body "}" { 
+    if($bool){ 
+      if(drv.runConditional($body) == 2) {
+        return 2;
+      }  
+    } 
+  
+  }
 ;
 
 %type <std::string> body;
 body: 
 %empty {$$="";}
 | BODY
-| body BODY {$$+= $2;}
+| body BODY {$$=$1; $$+= $2;}
 ;
 
 %type <std::vector<Var>> args_d;
@@ -140,7 +147,12 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "/" exp {$$= $1 / $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
-| bool_exp
+| bool_exp {$$=rvalue(Type::BOOL, $1);}
+;
+
+%type <bool> bool;
+bool: BOOL
+| bool_exp {$$=$1.getValue<bool>();} 
 ;
 
 %left "==" ">" "<" ">=" "<=" "!=";
@@ -152,7 +164,6 @@ bool_exp:
 | exp ">=" exp {$$=$1 >= $3;}
 | exp "<=" exp {$$=$1 <= $3;}
 | exp "!=" exp {$$=$1 != $3;}
-| BOOL {$$=rvalue(Type::BOOL, $1);}
 ;
 
 %%

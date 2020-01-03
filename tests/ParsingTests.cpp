@@ -125,6 +125,8 @@ TEST_CASE("Functions"){
     }
 
     SECTION("Recursion and ifs"){
+        drv.executeFile("/home/blackcat/school/Vortex/tests/TestFiles/function_declare.vx");
+
         exec("max(3, 5)");
 
         t_and_v_check(Type::INT, 5);

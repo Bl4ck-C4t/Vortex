@@ -1,10 +1,21 @@
+fn max(int a, int b) -> int{
+    int res = a;
+    if(a > b) {
+        res = a;
+    }
+    if(b > a){
+        res = b;
+    }
+    ret res;
+}
+
 fn f1(int asd, int g) -> int{
    
-    ret asd + g + 2
+    ret asd + g + 2;
 }
 
 fn f2() -> char{
-    ret 'c'
+    ret 'c';
 }
 
 fn f3(int asd) -> void{
@@ -17,28 +28,19 @@ fn fact(int n) -> int {
     if(n > 1){
         ret n * fact(n-1);
     }
-    ret 1
+    ret 1;
 }
 
-fn max(int a, int b) -> int{
-    if(a > b) {
-        res = a;
-    }
-    if(b > a){
-        res = b;
-    }
-    ret res
-}
+
 
 fn stat() -> int{
     int a = 5;
     if(2 < 3){
         a = 9;
     }
-    ret a
+    ret a;
 }
 
 fn test() -> void{
     ret;
 }
-

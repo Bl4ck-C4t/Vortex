@@ -12,14 +12,15 @@ void shiftUp(T* arr, int elements){
     }
 }
 
-void 
+int
 Driver::evaluate(const char* body){
     auto bp = scan_string(body);
     auto parser = createParser();
     parser.set_debug_level (trace_parsing);
 
-    parser();
+    int res = parser();
     revertBuffer(bp);
+    return res;
 }
 
 int 
@@ -98,7 +99,7 @@ Driver::callFunction(std::string name, std::vector<rvalue> args){
     }
     const Function& func = functions.get(name);
     FunctionCall call = FunctionCall(func, std::move(args));
-    call.setRefScope(getScope());
+    call.setFunctionRef(getScope());
     callStack_.push(call);
     evaluate(func.getBody().c_str());
     if(getLastValue().getType() != func.getType()){
@@ -111,14 +112,15 @@ Driver::callFunction(std::string name, std::vector<rvalue> args){
     // call
 }
 
-void 
+int 
 Driver::runConditional(std::string body){
     Function f = Function("", Type::VOID, std::vector<Var>(), "");
     FunctionCall call = FunctionCall(f, std::vector<rvalue>());
-    call.setRefScope(getScope());
+    call.setFullRef(getScope());
     callStack_.push(call);
-    evaluate(body.c_str());
+    int res = evaluate(body.c_str());
     callStack_.pop();
+    return res;
 
 }
 // if (true) { 20 }
@@ -131,12 +133,11 @@ Driver::setVariable(Var&& var){
   const rvalue& val = var.getValue();
   auto& variables = getScope().variables;
   if(var.getType() != val.getType()){
-    //   int sz = std::any_cast<std::string>(val.getValue()).size();
       location.end.column--;
     throw IncorrectTypesException("Value type incorrect", var.getType(), val.getType());
   }
   if(variables.contains(var.getName())){
-      variables[var.getName()].setValue(std::move(var.getValue()));
+      variables.get(var.getName()).setValue(std::move(var.getValue()));
   }
   variables[var.getName()] = std::move(var);
 }

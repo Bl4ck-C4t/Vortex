@@ -64,9 +64,9 @@ public:
 
   Var getVariable(std::string name);
 
-  void runConditional(std::string body);
+  int runConditional(std::string body);
 
-  void evaluate(const char* body);
+  int evaluate(const char* body);
 
   Scope& getScope(){
       callStack_.top().getScope();

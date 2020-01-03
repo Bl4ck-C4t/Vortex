@@ -97,7 +97,7 @@ float [0-9]+\.([0-9]+)?
 
 %%
 // "{}"       return yy::parser::make_BODY   ("", loc);
-// fn asd() -> int { if(true) { 5 } ret 7}
+// fn asd() -> int { if(true) { ret 5; } ret 7;}
 // fn tes() -> int { 10 }
 
 bool

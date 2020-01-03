@@ -39,9 +39,15 @@ class FunctionCall {
         }
     }
 
-    void setRefScope(Scope& r_scope){
+    void setFunctionRef(Scope& r_scope){
         MainScope.functions.setMap(&r_scope.functions);
         // MainScope.variables.setMap(&r_scope.variables);
+
+    }
+    
+    void setFullRef(Scope& r_scope){
+        MainScope.functions.setMap(&r_scope.functions);
+        MainScope.variables.setMap(&r_scope.variables);
 
     }
 
