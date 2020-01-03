@@ -23,6 +23,11 @@ bool true|false
 float [0-9]+\.([0-9]+)?
 
 %x BODY_S
+
+%{
+  int brackets = 0;
+  std::string body = "";
+%}
 %%
 
 %{
@@ -62,10 +67,18 @@ float [0-9]+\.([0-9]+)?
 "ret"      return yy::parser::make_RET    (loc);
 
 
-"{}"       return yy::parser::make_BODY   ("", loc);
-"{"        BEGIN(BODY_S);
-<BODY_S>[^\}]*  return yy::parser::make_BODY(yytext, loc);
-<BODY_S>"}" BEGIN(INITIAL);
+"{"        brackets++; BEGIN(BODY_S); return yy::parser::make_LCURLY(loc);
+<BODY_S>[^\}]*  { 
+  body = yytext;
+  for(int i=0; i < body.size(); i++) { 
+       if(body[i] == '{') { brackets++; }
+       
+  }   
+  brackets--; 
+     
+  return yy::parser::make_BODY(yytext, loc);
+}
+<BODY_S>"}" if(brackets == 0) { BEGIN(INITIAL); return yy::parser::make_RCURLY(loc);} else{return yy::parser::make_BODY("}", loc);}
 
 {bool} return yy::parser::make_BOOL(stob(yytext), loc);
 {char} return yy::parser::make_CHAR(yytext[1], loc);
@@ -83,6 +96,10 @@ float [0-9]+\.([0-9]+)?
                (loc, "invalid character: " + std::string(yytext));}
 
 %%
+// "{}"       return yy::parser::make_BODY   ("", loc);
+// fn asd() -> int { if(true) { 5 } ret 7}
+// fn tes() -> int { 10 }
+
 bool
 stob(std::string s){
   if(s == "true"){

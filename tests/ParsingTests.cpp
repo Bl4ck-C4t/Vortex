@@ -87,6 +87,21 @@ TEST_CASE("Test variable creation"){
 
 }
 
+TEST_CASE("Conditionals"){
+    Driver drv;
+    auto exec = generateExecutor(drv);
+    const auto& [type_checker, value_checker, t_and_v_check] = generateValueCheckers(drv);
+    SECTION("Basic tests"){
+        exec("if(2 > 1) { 10 }");
+
+        t_and_v_check(Type::INT, 10);
+
+        exec("15 if (false) { 20 }");
+
+        t_and_v_check(Type::INT, 15);
+    }
+}
+
 TEST_CASE("Functions"){
     Driver drv;
     auto exec = generateExecutor(drv);
@@ -105,8 +120,30 @@ TEST_CASE("Functions"){
         exec("f3(69)");
 
         type_checker(Type::VOID);
+        
 
     }
+
+    SECTION("Recursion and ifs"){
+        exec("max(3, 5)");
+
+        t_and_v_check(Type::INT, 5);
+
+
+        exec("fact(1)");
+
+        t_and_v_check(Type::INT, 1);
+
+        exec("fact(2)");
+
+        t_and_v_check(Type::INT, 2);
+
+        exec("fact(4)");
+
+        t_and_v_check(Type::INT, 24);
+    }
 }
+
+
 
 #endif

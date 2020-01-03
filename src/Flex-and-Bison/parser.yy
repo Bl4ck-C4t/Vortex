@@ -48,6 +48,8 @@
   COMMA   ","
   LPAREN  "("
   RPAREN  ")"
+  LCURLY  "{"
+  RCURLY  "}"
   SEMICOL ";"
   FUNC "fn"
   RETSIGN "->"
@@ -71,7 +73,7 @@ result:
       drv.setLastValue(std::move($2)); if(drv.isPrintingLastValue()) std::cout << ">> " << drv.getLastValue() << '\n';
     }
   }
-  | result "ret" exp {drv.setLastValue(std::move($3)); return 0;}
+  | result "ret" exp ";" {drv.setLastValue(std::move($3)); return 0;}
   | result "ret" ";" {drv.setLastValue(std::move(rvalue()));return 0;}
 ;
 
@@ -82,8 +84,15 @@ clause: exp
 
 
 statement:
-  "fn" SYMBOL "(" args_d ")" "->" TYPE BODY[body] {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
-| "if" "(" bool_exp ")" BODY[body] { if($bool_exp.getValue<bool>()){ drv.evaluate($body.c_str());    } }
+  "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
+| "if" "(" bool_exp ")" "{" body "}" { if($bool_exp.getValue<bool>()){ drv.runConditional($body);  } }
+;
+
+%type <std::string> body;
+body: 
+%empty {$$="";}
+| BODY
+| body BODY {$$+= $2;}
 ;
 
 %type <std::vector<Var>> args_d;

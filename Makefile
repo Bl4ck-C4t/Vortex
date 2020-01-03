@@ -19,6 +19,8 @@ $(PRECOMP)/lexer.cc: $(SOURCE)/Flex-and-Bison/*.l
 $(BASE): $(INTER_INCLUDES) main.cc
 	$(CXX) $^ -g -o $(OUT)/$@ 
 
+lexer: $(INTER_INCLUDES) debugMain.cc
+	$(CXX) $^ -g -o $(OUT)/$@
 
 run: $(BASE)
 	@echo "Started:"

@@ -111,6 +111,16 @@ Driver::callFunction(std::string name, std::vector<rvalue> args){
     // call
 }
 
+void 
+Driver::runConditional(std::string body){
+    Function f = Function("", Type::VOID, std::vector<Var>(), "");
+    FunctionCall call = FunctionCall(f, std::vector<rvalue>());
+    call.setRefScope(getScope());
+    callStack_.push(call);
+    evaluate(body.c_str());
+    callStack_.pop();
+
+}
 // if (true) { 20 }
 
 
