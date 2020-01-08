@@ -87,14 +87,6 @@ clause: exp
 
 statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
-| "if" "(" bool ")" "{" body "}" { 
-    if($bool){ 
-      if(drv.runConditional($body) == 2) {
-        return 2;
-      }  
-    } 
-  
-  }
 | "import" FILEPATH {drv.executeFile($2);}
 ;
 
@@ -132,6 +124,7 @@ decl: TYPE SYMBOL "=" exp ";" {drv.setVariable(Var($1, $2, $exp)); $$=std::move(
 | SYMBOL "=" exp ";" {drv.setVariable(Var($exp.getType(), $1, $exp)); $$=std::move($exp);}
 ;
 
+%left "==" ">" "<" ">=" "<=" "!=";
 %left "+" "-";
 %left "*" "/";
 %precedence NEG;
@@ -150,7 +143,8 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "/" exp {$$= $1 / $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
-| bool_exp {$$=rvalue(Type::BOOL, $1);}
+| bool_exp 
+| if_stmnt {$$=rvalue(Type::BOOL, $1);}
 ;
 
 %type <bool> bool;
@@ -158,7 +152,6 @@ bool: BOOL
 | bool_exp {$$=$1.getValue<bool>();} 
 ;
 
-%left "==" ">" "<" ">=" "<=" "!=";
 %type <rvalue> bool_exp;
 bool_exp:
  exp "==" exp {$$=$1 == $3;}
@@ -168,6 +161,25 @@ bool_exp:
 | exp "<=" exp {$$=$1 <= $3;}
 | exp "!=" exp {$$=$1 != $3;}
 ;
+
+%type <bool> if_stmnt;
+if_stmnt:
+"if" "(" bool ")" "{" body "}" { $$= $bool; 
+    if($bool){ 
+      if(drv.runConditional($body) == 2) {
+        return 2;
+      }  
+    } 
+  }
+| if_stmnt "else" "{" body "}" {  $$=$1;
+    if(!$1) {
+      if(drv.runConditional($body) == 2) {
+        return 2;
+      }  
+    }
+  }
+;
+
 
 %%
 namespace yy

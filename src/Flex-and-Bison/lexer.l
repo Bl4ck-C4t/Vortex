@@ -47,7 +47,7 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 "void"     return yy::parser::make_TYPE   (Type::VOID, loc);
 
 "if"       return yy::parser::make_IF              (loc);
-"else"       return yy::parser::make_ELSE              (loc);
+"else"     return yy::parser::make_ELSE            (loc);
 "=="       return yy::parser::make_COMPARE         (loc);
 ">"        return yy::parser::make_GREATER         (loc);
 "<"        return yy::parser::make_LESS            (loc);

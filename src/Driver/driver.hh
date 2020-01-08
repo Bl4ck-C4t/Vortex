@@ -127,6 +127,8 @@ public:
   void setLastValue(rvalue&& r){
       last_returned_ = r;
   }
+
+  std::stack<FunctionCall>& getStack() { return callStack_; }
   // The name of the file being parsed.
   
 

@@ -55,6 +55,10 @@ class FunctionCall {
         return MainScope;
     }
 
+    const Function& getFunc(){
+        return fun;
+    }
+
 };
 
 #endif
