@@ -21,6 +21,7 @@ string_v2 \"[^"]*\"
 char \'.?\'
 bool true|false
 float [0-9]+\.([0-9]+)?
+path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 
 %x BODY_S
 
@@ -46,6 +47,7 @@ float [0-9]+\.([0-9]+)?
 "void"     return yy::parser::make_TYPE   (Type::VOID, loc);
 
 "if"       return yy::parser::make_IF              (loc);
+"else"       return yy::parser::make_ELSE              (loc);
 "=="       return yy::parser::make_COMPARE         (loc);
 ">"        return yy::parser::make_GREATER         (loc);
 "<"        return yy::parser::make_LESS            (loc);
@@ -65,6 +67,7 @@ float [0-9]+\.([0-9]+)?
 "->"       return yy::parser::make_RETSIGN(loc);  
 ","        return yy::parser::make_COMMA  (loc);  
 "ret"      return yy::parser::make_RET    (loc);
+"import"   return yy::parser::make_IMPORT (loc);
 
 
 "{"        brackets++; BEGIN(BODY_S); return yy::parser::make_LCURLY(loc);
@@ -73,12 +76,15 @@ float [0-9]+\.([0-9]+)?
   for(int i=0; i < body.size(); i++) { 
        if(body[i] == '{') { brackets++; }
        
-  }   
+  }
   brackets--; 
      
   return yy::parser::make_BODY(yytext, loc);
 }
 <BODY_S>"}" if(brackets == 0) { BEGIN(INITIAL); return yy::parser::make_RCURLY(loc);} else{return yy::parser::make_BODY("}", loc);}
+
+{path} { return yy::parser::make_FILEPATH(yytext, loc); }
+
 
 {bool} return yy::parser::make_BOOL(stob(yytext), loc);
 {char} return yy::parser::make_CHAR(yytext[1], loc);

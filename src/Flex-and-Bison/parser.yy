@@ -28,7 +28,7 @@
 
 %token END_OF_FILE 0
 %token <Type> TYPE;
-%token <std::string> SYMBOL STRING BODY;
+%token <std::string> SYMBOL STRING BODY FILEPATH;
 %token <int> INTEGER;
 %token <float> FLOAT;
 %token <char> CHAR;
@@ -55,6 +55,8 @@
   RETSIGN "->"
   RET "ret"
   IF "if"
+  ELSE "else"
+  IMPORT "import"
   ;
 
 
@@ -93,6 +95,7 @@ statement:
     } 
   
   }
+| "import" FILEPATH {drv.executeFile($2);}
 ;
 
 %type <std::string> body;
