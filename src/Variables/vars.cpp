@@ -1,9 +1,7 @@
 #include "vars.hpp"
 #include "../Operations/OperationExecutor.hpp"
-#include "../Operations/IntOperations.hpp"
-#include "../Operations/SumString.hpp"
-#include "../Operations/FloatOperations.hpp"
 #include "../Operations/BoolOperations.hpp"
+#include "../Operations/Operations.hpp"
 
 
 rvalue
@@ -134,23 +132,14 @@ void
 rvalue::setupOperations() {
         
         operations = new OperationExecutor();
-        
-        operations->addOperation(new SumInt());
-        operations->addOperation(new SumString());
-        operations->addOperation(new FloatSum());
 
-        operations->addOperation(new SubInt());
-        operations->addOperation(new FloatSub());
-        operations->addOperation(new SubIntF());
+        operations->addOperation(new StringSum());
 
-        operations->addOperation(new MulInt());
-        operations->addOperation(new FloatMul());
-
-        operations->addOperation(new DivInt());
-        operations->addOperation(new FloatDiv());
-
-        operations->addOperation(new PowInt());
-        operations->addOperation(new FloatPow());
+        operations->addOperation(new NumberSumOper());
+        operations->addOperation(new NumberSubOper());
+        operations->addOperation(new NumberMulOper());
+        operations->addOperation(new NumberDivOper());
+        operations->addOperation(new NumberPowOper());
 
         operations->addOperation(new CompareNumsBool());
         operations->addOperation(new GreaterThanBoolNum());

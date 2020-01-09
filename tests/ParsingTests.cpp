@@ -83,6 +83,24 @@ TEST_CASE("Test variable creation"){
         exec("2**2 - 5 * -1 + 1");
         t_and_v_check(Type::INT, 10);
 
+        exec("5.5 - 4**0.5");
+        t_and_v_check(Type::FLOAT, 3.5f);
+
+         exec("2 * 0.5");
+        t_and_v_check(Type::FLOAT, 1.0f);
+
+         exec("3 + 3");
+        t_and_v_check(Type::INT, 6);
+
+         exec("1.2 - 0.2");
+        t_and_v_check(Type::FLOAT, 1.0f);
+
+         exec("\"help \" + \"me\"");
+        t_and_v_check(Type::STRING, std::string("help me"));
+
+         exec("\" i luv \" + 'u'");
+        t_and_v_check(Type::STRING, std::string(" i luv u"));
+
     }
 
 }
@@ -92,13 +110,22 @@ TEST_CASE("Conditionals"){
     auto exec = generateExecutor(drv);
     const auto& [type_checker, value_checker, t_and_v_check] = generateValueCheckers(drv);
     SECTION("Basic tests"){
-        exec("if(2 > 1) { 10 }");
+        exec("int res = 5;");
+        exec("if(2 > 1) { res = 10; }");
 
+        t_and_v_check(Type::BOOL, true);
+
+        exec("res");
         t_and_v_check(Type::INT, 10);
 
-        exec("15 if (false) { 20 }");
+        exec("15 if (2**2 - 3 > 5) { res = 20; } else { res = 35; }");
 
-        t_and_v_check(Type::INT, 15);
+        t_and_v_check(Type::BOOL, false);
+
+        exec("res");
+        t_and_v_check(Type::INT, 35);
+
+
     }
 }
 

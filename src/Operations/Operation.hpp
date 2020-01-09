@@ -2,6 +2,7 @@
 #define OPERATION_HPP
 #include "../Variables/vars.hpp"
 #include <cmath>
+#include <tuple>
 #include <string>
 
 class Operation{
@@ -20,6 +21,46 @@ class Operation{
 
         std::string getOper() const{
             return oper_;
+        }
+
+        static std::tuple<float, float>floatCast(rvalue& lhs, rvalue& rhs){
+            float f1,f2;
+
+            if(lhs.getType() == Type::INT){
+                f1 = (float)lhs.getValue<int>();
+            }
+            else{
+                f1 = lhs.getValue<float>();
+            }
+
+            if(rhs.getType() == Type::INT){
+                f2 = (float)rhs.getValue<int>();
+            }
+            else{
+                f2 = rhs.getValue<float>();
+            }
+
+            return std::make_tuple(f1, f2);
+
+        }
+
+        static std::tuple<std::string, std::string>stringCast(rvalue& lhs, rvalue& rhs){
+            std::string f1,f2;
+            if(lhs.getType() == Type::CHAR){
+                f1 = lhs.getValue<char>();
+            }
+            else{
+                f1 = lhs.getValue<std::string>();
+            }
+
+            if(rhs.getType() == Type::CHAR){
+                f2 = rhs.getValue<char>();
+            }
+            else{
+                f2 = rhs.getValue<std::string>();
+            }
+
+            return std::make_tuple(f1, f2);
         }
 };
 
