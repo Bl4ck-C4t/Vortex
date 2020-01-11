@@ -7,6 +7,7 @@ yy::parser::symbol_type yylex(Driver& drv);
 int main(){
     Driver drv;
     while(true){
+        std::cout << "Scanning: ";
         yy::parser::symbol_type ret = yylex(drv);
         if(ret.type == 0){
             break;

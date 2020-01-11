@@ -94,7 +94,6 @@ statement:
 body: 
 %empty {$$="";}
 | BODY
-| body BODY {$$=$1; $$+= $2;}
 ;
 
 %type <std::vector<Var>> args_d;

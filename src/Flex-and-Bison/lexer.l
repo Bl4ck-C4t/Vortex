@@ -70,18 +70,19 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 "import"   return yy::parser::make_IMPORT (loc);
 
 
-"{"        brackets++; BEGIN(BODY_S); return yy::parser::make_LCURLY(loc);
+"{"        brackets=1;body=""; BEGIN(BODY_S); return yy::parser::make_LCURLY(loc);
 <BODY_S>[^\}]*  { 
-  body = yytext;
-  for(int i=0; i < body.size(); i++) { 
-       if(body[i] == '{') { brackets++; }
+  body += yytext;
+  for(int i=0; i < yyleng; i++) { 
+       if(yytext[i] == '{') { brackets++; }
        
   }
   brackets--; 
-     
-  return yy::parser::make_BODY(yytext, loc);
+  if(brackets == 0){
+    return yy::parser::make_BODY(body, loc);
+  }
 }
-<BODY_S>"}" if(brackets == 0) { BEGIN(INITIAL); return yy::parser::make_RCURLY(loc);} else{return yy::parser::make_BODY("}", loc);}
+<BODY_S>"}" if(brackets == 0) { BEGIN(INITIAL); return yy::parser::make_RCURLY(loc);} else{ body += "}"; } 
 
 {path} { return yy::parser::make_FILEPATH(yytext, loc); }
 
@@ -92,7 +93,16 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 [0-9]+ return yy::parser::make_INTEGER(atoi(yytext), loc);
 
 {string_v1} |
-{string_v2} {std::string text = std::string(yytext);return yy::parser::make_STRING(text.substr(1,text.length()-2), loc);}
+{string_v2} { /* " help \" me \" from " */
+  if(yytext[yyleng-2] == '\\'){
+    yyless(yyleng-1);
+    yymore();
+  }else{
+    std::string text = std::string(yytext);
+    return yy::parser::make_STRING(text.substr(1,yyleng-2), loc);
+  }
+  
+}
 
 {identifier} { return yy::parser::make_SYMBOL(yytext, loc); }
 
