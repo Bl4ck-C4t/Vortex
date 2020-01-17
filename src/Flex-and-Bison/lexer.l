@@ -55,19 +55,22 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 "<="       return yy::parser::make_SMALLEREQUAL    (loc);
 "!="       return yy::parser::make_DIFFERENT       (loc);
 
-"-"        return yy::parser::make_MINUS  (loc);
-"+"        return yy::parser::make_PLUS   (loc);
-"*"        return yy::parser::make_STAR   (loc);
-"/"        return yy::parser::make_SLASH  (loc);
-"("        return yy::parser::make_LPAREN (loc);
-")"        return yy::parser::make_RPAREN (loc);
-"="        return yy::parser::make_EQUALS (loc);
-";"        return yy::parser::make_SEMICOL(loc);
-"fn"       return yy::parser::make_FUNC   (loc);
-"->"       return yy::parser::make_RETSIGN(loc);  
-","        return yy::parser::make_COMMA  (loc);  
-"ret"      return yy::parser::make_RET    (loc);
-"import"   return yy::parser::make_IMPORT (loc);
+"-"        return yy::parser::make_MINUS           (loc);
+"+"        return yy::parser::make_PLUS            (loc);
+"*"        return yy::parser::make_STAR            (loc);
+"/"        return yy::parser::make_SLASH           (loc);
+"("        return yy::parser::make_LPAREN          (loc);
+")"        return yy::parser::make_RPAREN          (loc);
+"="        return yy::parser::make_EQUALS          (loc);
+";"        return yy::parser::make_SEMICOL         (loc);
+"fn"       return yy::parser::make_FUNC            (loc);
+"->"       return yy::parser::make_RETSIGN         (loc);  
+","        return yy::parser::make_COMMA           (loc);  
+"ret"      return yy::parser::make_RET             (loc);
+"import"   return yy::parser::make_IMPORT          (loc);
+"loop"     return yy::parser::make_LOOP            (loc);
+"break"    return yy::parser::make_BREAK           (loc);
+
 
 
 "{"        brackets=1;body=""; BEGIN(BODY_S); return yy::parser::make_LCURLY(loc);

@@ -57,6 +57,8 @@
   IF "if"
   ELSE "else"
   IMPORT "import"
+  LOOP "loop"
+  BREAK "break"
   ;
 
 
@@ -77,6 +79,8 @@ result:
   }
   | result "ret" exp ";" {drv.setLastValue(std::move($3)); return 2;}
   | result "ret" ";" {drv.setLastValue(std::move(rvalue()));return 2;}
+  | result "break" ";" {drv.setLastValue(std::move(rvalue()));return 2;}
+
 ;
 
 %type <rvalue> clause;
@@ -88,6 +92,7 @@ clause: exp
 statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
 | "import" FILEPATH {drv.executeFile($2);}
+| "loop" "{" body "}" { while(true) { int res = drv.loop($body); if(res == 2){ break; } } }
 ;
 
 %type <std::string> body;
@@ -183,7 +188,7 @@ if_stmnt:
 %%
 namespace yy
 {
-  // Report an error to the user.
+  // Report an error to the user. a = 2; loop { a = a +2; if(a == 10) {ret;} }
   auto parser::error (const location_type& l, const std::string& msg) -> void
   {
     std::string* arr = drv.getLastLines();

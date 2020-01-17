@@ -66,6 +66,8 @@ public:
 
   int runConditional(std::string body);
 
+  int loop(std::string body);
+
   int evaluate(const char* body);
 
   Scope& getScope(){

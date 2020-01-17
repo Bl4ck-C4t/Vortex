@@ -123,6 +123,19 @@ Driver::runConditional(std::string body){
     return res;
 
 }
+
+int
+Driver::loop(std::string body){ // a = 3; loop { a = a + 2; if(a == 9) { break; } }
+    Function f = Function("", Type::VOID, std::vector<Var>(), "");
+    FunctionCall call = FunctionCall(f, std::vector<rvalue>());
+    call.setFullRef(getScope());
+    callStack_.push(call);
+    int res = evaluate(body.c_str());
+    callStack_.pop();
+    return res;
+}
+
+
 // if (true) { 20 }
 
 
