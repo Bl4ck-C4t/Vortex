@@ -1,0 +1,12 @@
+int c = 4
+fn f2() ->void {
+    1337
+}
+fn f1(int asd, char g) -> void{
+    f2()
+    int b = 4
+    b / asd
+}
+ret;
+f1(2, true)
+0

@@ -1,0 +1,19 @@
+fn fact(int n) -> int {
+    if(n > 1){
+        ret n * fact(n-1);
+    }
+    ret 1;
+}
+
+fn max(int a, int b) -> int{
+    int res = a;
+    if(a > b) {
+        res = a;
+    }
+    if(b > a){
+        res = b;
+    }
+    ret res;
+}
+
+max(2, 3)
