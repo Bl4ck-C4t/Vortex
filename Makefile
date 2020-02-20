@@ -1,4 +1,4 @@
-BASE = interpretator
+BASE = vortex
 BISON = bison
 CXX = g++ -std=c++1z
 FLEX = flex
