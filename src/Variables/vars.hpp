@@ -9,7 +9,7 @@
 // #include "../Operations/SubInt.hpp"
 // #include "../Operations/MulInt.hpp"
 class OperationExecutor;
-enum struct Type { INT, STRING, CHAR, FLOAT, BOOL, VOID, FUNC};
+enum struct Type { INT, STRING, CHAR, FLOAT, BOOL, VOID, FUNC, OBJECT};
 
 std::string typeToString(Type tp);
 

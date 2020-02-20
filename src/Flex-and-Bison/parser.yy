@@ -48,9 +48,12 @@
   COMMA   ","
   LPAREN  "("
   RPAREN  ")"
+  LSQUARE "["
+  RSQUARE "]"
   LCURLY  "{"
   RCURLY  "}"
   SEMICOL ";"
+  DOT     "."
   FUNC "fn"
   RETSIGN "->"
   RET "ret"
@@ -147,6 +150,8 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "/" exp {$$= $1 / $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
+| "[" args "]" {$$=rvalue(Type::OBJECT, $args);}
+| exp "."  SYMBOL "(" args ")" {}
 | bool_exp 
 | if_stmnt {$$=rvalue(Type::BOOL, $1);}
 ;

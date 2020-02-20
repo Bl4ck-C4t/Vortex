@@ -61,11 +61,14 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 "/"        return yy::parser::make_SLASH           (loc);
 "("        return yy::parser::make_LPAREN          (loc);
 ")"        return yy::parser::make_RPAREN          (loc);
+"["        return yy::parser::make_LSQUARE         (loc);
+"]"        return yy::parser::make_RSQUARE         (loc);
 "="        return yy::parser::make_EQUALS          (loc);
 ";"        return yy::parser::make_SEMICOL         (loc);
 "fn"       return yy::parser::make_FUNC            (loc);
 "->"       return yy::parser::make_RETSIGN         (loc);  
-","        return yy::parser::make_COMMA           (loc);  
+","        return yy::parser::make_COMMA           (loc);
+"."        return yy::parser::make_DOT             (loc);  
 "ret"      return yy::parser::make_RET             (loc);
 "import"   return yy::parser::make_IMPORT          (loc);
 "loop"     return yy::parser::make_LOOP            (loc);
