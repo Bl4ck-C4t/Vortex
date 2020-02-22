@@ -15,16 +15,26 @@ class FunctionNotDefined: public ParserException{
     FunctionNotDefined(std::string msg): ParserException(msg) {}
     FunctionNotDefined(): ParserException("Function not defined") {}
 };
+enum FuncType {
+    VORTEX,
+    NATIVE
+};
 
 class Function: public Var{
+    
+
     Type ret_type_;
     std::vector<Var> arg_list_;
+    FuncType function_type_ = FuncType::VORTEX;
 
    public:
     Function(std::string nm, Type r_type, std::vector<Var>&& vec, std::string body):
      ret_type_(r_type), arg_list_(std::move(vec)), Var(r_type, nm, rvalue(Type::STRING, body)) {}
 
     Function() {}
+
+    Function(std::string nm, Type r_type, FuncType ft):
+        ret_type_(r_type), Var(r_type, nm, rvalue()) {}
 
     std::string getBody() const {
         return getValue().getValue<std::string>();

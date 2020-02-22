@@ -62,6 +62,8 @@ public:
 
   void callFunction(std::string name, std::vector<rvalue> args);
 
+  void runFunc(Function& func, std::vector<rvalue>&& args);
+
   Var getVariable(std::string name);
 
   int runConditional(std::string body);

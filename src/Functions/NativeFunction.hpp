@@ -2,15 +2,18 @@
 #define NATIVEFUNC_HPP
 #include <string>
 #include <vector>
+#include <functional>
 #include "../Variables/vars.hpp"
+#include "../Driver/driver.hh"
 #include "Function.hpp"
 
 class NativeFunc: Function{
+    using T = std::function<void(std::vector<rvalue>&& args, Driver& drv)>;
     public:
-    NativeFunc(std::string nm, Type r_type, std::vector<Var>&& vec):
-     Function(nm, r_type, std::move(vec), "") {}
-
-     virtual void call(std::vector<Var>&& args) = 0;
+        T body_;
+    template<typename T>
+    NativeFunc(std::string nm, Type r_type, const T& body):
+     body_(body), Function(nm, r_type, FuncType::NATIVE) {}
 };
 
 #endif

@@ -112,6 +112,19 @@ Driver::callFunction(std::string name, std::vector<rvalue> args){
     // call
 }
 
+void 
+Driver::runFunc(Function& func, std::vector<rvalue>&& args){
+    FunctionCall call = FunctionCall(func, std::move(args));
+    call.setFunctionRef(getScope());
+    callStack_.push(call);
+    evaluate(func.getBody().c_str());
+    if(getLastValue().getType() != func.getType()){
+        throw IncorrectTypesException("The type returned from function '" + func.getName() + "' is incorrect", 
+        func.getType(), getLastValue().getType());
+    }
+    callStack_.pop();
+}
+
 int 
 Driver::runConditional(std::string body){
     Function f = Function("", Type::VOID, std::vector<Var>(), "");
@@ -205,6 +218,11 @@ std::ostream& operator<<(std::ostream& o, rvalue r){
 
             case Type::BOOL:
                 res = std::any_cast<bool>(r.getValue()) ? "true" : "false";
+                o << res;
+                break;
+            case Type::OBJECT:
+                //res = std::any_cast<bool>(r.getValue()) ? "true" : "false";
+                res = "object";
                 o << res;
                 break;
             

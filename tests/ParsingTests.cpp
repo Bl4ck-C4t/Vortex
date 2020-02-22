@@ -124,8 +124,6 @@ TEST_CASE("Conditionals"){
 
         exec("res");
         t_and_v_check(Type::INT, 35);
-
-
     }
 }
 

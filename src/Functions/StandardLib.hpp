@@ -7,9 +7,7 @@
 #include "NativeFunction.hpp"
 
 class PushList: NativeFunc{
-    PushList(): NativeFunc("push", Type::VOID, {Var(Type::INT, "val")}) {
-        Var(Type::INT, "val");
-    }
+   
 };
 
 #endif

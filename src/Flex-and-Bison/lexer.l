@@ -39,12 +39,12 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 %}
 ^.+$       {drv.addLine(yytext);REJECT;}
 \n+        {loc.lines (yyleng); loc.step (); }
-"int"      return yy::parser::make_TYPE   (Type::INT, loc);
-"string"   return yy::parser::make_TYPE   (Type::STRING, loc);
-"char"     return yy::parser::make_TYPE   (Type::CHAR, loc);
-"float"    return yy::parser::make_TYPE   (Type::FLOAT, loc);
-"bool"     return yy::parser::make_TYPE   (Type::BOOL, loc);
-"void"     return yy::parser::make_TYPE   (Type::VOID, loc);
+"int"      return yy::parser::make_TYPE            (Type::INT, loc);
+"string"   return yy::parser::make_TYPE            (Type::STRING, loc);
+"char"     return yy::parser::make_TYPE            (Type::CHAR, loc);
+"float"    return yy::parser::make_TYPE            (Type::FLOAT, loc);
+"bool"     return yy::parser::make_TYPE            (Type::BOOL, loc);
+"void"     return yy::parser::make_TYPE            (Type::VOID, loc);
 
 "if"       return yy::parser::make_IF              (loc);
 "else"     return yy::parser::make_ELSE            (loc);

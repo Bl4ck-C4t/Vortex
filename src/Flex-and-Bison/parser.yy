@@ -151,7 +151,7 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
 | "[" args "]" {$$=rvalue(Type::OBJECT, $args);}
-| exp "."  SYMBOL "(" args ")" {}
+| exp "."  SYMBOL "(" args ")" {} // [2,3,].push(4)
 | bool_exp 
 | if_stmnt {$$=rvalue(Type::BOOL, $1);}
 ;
