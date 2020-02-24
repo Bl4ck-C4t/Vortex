@@ -150,8 +150,9 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "/" exp {$$= $1 / $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
-| "[" args "]" {$$=rvalue(Type::OBJECT, $args);}
-| exp "."  SYMBOL "(" args ")" {} // [2,3,].push(4)
+| "[" args "]" {$$=drv.makeVector(std::move(args));}
+| exp "."  SYMBOL "(" args ")" {Instance inst = exp.getValue<Instance>();
+      inst.callMethod($SYMBOL, $args, drv);}
 | bool_exp 
 | if_stmnt {$$=rvalue(Type::BOOL, $1);}
 ;

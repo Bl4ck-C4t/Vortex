@@ -4,6 +4,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include "../Classes/Instance.hpp"
 
 template<class T>
 void shiftUp(T* arr, int elements){
@@ -148,7 +149,13 @@ Driver::loop(std::string body){ // a = 3; loop { a = a + 2; if(a == 9) { break; 
     return res;
 }
 
-
+rvalue 
+Driver::makeVector(std::vector<rvalue>&& args){
+    Class& vec_class = callStack_.top().getScope().classes.get("vector");
+    Instance vector_instance(vec_class);
+    vector_instance.callMethod("construct", {rvalue(Type::OBJECT, std::move(args))}, *this);
+    return rvalue(Type::OBJECT, vector_instance);
+}
 // if (true) { 20 }
 
 

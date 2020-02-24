@@ -6,6 +6,7 @@
 #include "../Functions/Function.hpp"
 #include "../Utility/RefMap.hpp"
 #include "../Functions/FunctionCall.hpp"
+#include "../Functions/StandardLib.hpp"
 #include <map>
 #include <stack>
 
@@ -40,6 +41,13 @@ public:
   Driver() {
       Function f = Function("main", Type::VOID, std::vector<Var>(), "");
       FunctionCall call = FunctionCall(f);
+      StdLib lib();
+      for(auto it = lib.classes.begin(); it != lib.classes.end(); it++){
+          call.getScope().classes[it->getName()] = *it;
+      }
+
+
+
       callStack_.push(std::move(call));
  }
 
@@ -59,6 +67,8 @@ public:
   void setVariable(Var&& var);
 
   void declareFunction(Function&& f);
+
+  rvalue makeVector(std::vector<rvalue>&& args);
 
   void callFunction(std::string name, std::vector<rvalue> args);
 

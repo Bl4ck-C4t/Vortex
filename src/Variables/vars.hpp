@@ -110,6 +110,11 @@ struct Var{
         return value;
     }
 
+    template<class T>
+    T getValue() const{
+        return value.getValue<T>();
+    }
+
     void setValue(rvalue&& n_val){
         value = std::move(n_val);
         var_type = n_val.getType();
