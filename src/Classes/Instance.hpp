@@ -10,13 +10,13 @@
 
 class Instance{
     Class& class_;
-    RefMap<std::string, Var> properties_;
+    RefMap<std::string, Var*> properties_;
     public:
 
     Instance(Class ref_class):
         class_(ref_class) {
             for(auto it = ref_class.getProps().begin(); it != ref_class.getProps().end(); it++){
-                properties_[it->first] = Var(it->second);
+                properties_[it->first] = new Var(*(it->second));
             }
         }
 
@@ -24,16 +24,16 @@ class Instance{
         if(!properties_.contains(name)){
             throw ParserException("No property with name '" + name + "'");
         }
-        Var& property = properties_.get(name);
+        Var& property = *(properties_.get(name));
         return property;
     }
 
     void callMethod(std::string name, std::vector<rvalue>&& args, Driver& drv){
-        std::map<std::string, Var>& props = class_.getProps();
+        std::map<std::string, Var*>& props = class_.getProps();
         if(props.find(name) == props.end()){
              throw FunctionNotDefined("Function '" + name + "' does not exist.");
         }
-        Var& v = props[name];
+        Var& v = *(props[name]);
         if(v.getType() != Type::FUNC){
             throw ParserException("property with name '" + name + "' is not callable.");
         }

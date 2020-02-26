@@ -11,17 +11,15 @@
 class Class{
     Driver& drv;
     std::string name_;
-    std::map<std::string, Var> properties_;
-
-   
+    std::map<std::string, Var*> properties_;
 
      public:
      
-      Class(std::string nm, std::vector<Var>&& vec, Driver& driver):
+      Class(std::string nm, std::vector<Var*>&& vec, Driver& driver):
      name_(nm), drv(driver) {
          for (int i = 0; i < vec.size(); i++)
          {
-             properties_[vec[i].getName()] = vec[i];
+             properties_[vec[i]->getName()] = vec[i];
          }
 
      }
@@ -30,7 +28,7 @@ class Class{
          return name_;
      }
 
-     std::map<std::string, Var>& getProps() {
+     std::map<std::string, Var*>& getProps() {
          return properties_;
      }
 

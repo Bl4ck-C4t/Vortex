@@ -15,15 +15,15 @@ struct StdLib{
     std::vector<Class> classes;
     StdLib(Driver& drv) {
 
-        std::vector<Var> props = {
-            Var(Type::OBJECT, "vec"),
-            NativeMethod("construct", Type::VOID, [](std::vector<rvalue>&& args, Instance& inst, Driver& drv){
+        std::vector<Var*> props = {
+            new Var(Type::OBJECT, "vec"),
+            new NativeMethod("construct", Type::VOID, [](std::vector<rvalue>&& args, Instance& inst, Driver& drv){
                 rvalue rv = args[0];
                 std::vector<rvalue>& vec = inst.getProp("vec").getValue<std::vector<rvalue>&>();
                 vec = rv.getValue<std::vector<rvalue>>();
                 std::cout << "Created vector" << std::endl;
             }),
-            NativeMethod("push", Type::VOID, [](std::vector<rvalue>&& args, Instance& inst, Driver& drv){
+            new NativeMethod("push", Type::VOID, [](std::vector<rvalue>&& args, Instance& inst, Driver& drv){
                 rvalue rv = args[0];
                 std::vector<rvalue>& vec = inst.getProp("vec").getValue<std::vector<rvalue>&>();
                 vec.push_back(std::move(rv));
