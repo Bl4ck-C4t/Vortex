@@ -5,7 +5,7 @@
 #include <string.h>
 #include "parser.hh"
 #include "location.hh"
-#include "../src/Driver/driver.hh"
+#include "../src/Driver/driver.hpp"
 #include "../src/Variables/vars.hpp"  
 #define YY_DECL yy::parser::symbol_type yylex(Driver& drv)
 #define yyterminate() return yy::parser::make_END_OF_FILE(loc)

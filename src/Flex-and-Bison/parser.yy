@@ -10,7 +10,7 @@
 %define api.token.prefix {TOK_}
 
 %{
-#include "../src/Driver/driver.hh"
+#include "../src/Driver/driver.hpp"
 %}
 
 

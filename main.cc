@@ -1,4 +1,4 @@
-#include "src/Driver/driver.hh"
+#include "src/Driver/driver.hpp"
 #include "precompiled/parser.hh"
 #include "src/Variables/vars.hpp"
 int main(int argc, char *argv[]){
