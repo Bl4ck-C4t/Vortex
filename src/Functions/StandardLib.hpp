@@ -5,7 +5,7 @@
 #include <iostream>
 #include "../Variables/vars.hpp"
 #include "../Classes/Class.hpp"
-#include "../Driver/driver.hh"
+#include "../Driver/driver.hpp"
 #include "../Classes/Instance.hpp"
 #include "Function.hpp"
 #include "NativeFunction.hpp"

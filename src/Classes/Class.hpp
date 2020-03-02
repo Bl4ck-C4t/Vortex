@@ -6,7 +6,7 @@
 #include "../Variables/vars.hpp"
 #include "../Utility/RefMap.hpp"
 #include "../Functions/Function.hpp"
-#include "../Driver/driver.hh"
+#include "../Driver/driver.hpp"
 
 class Class{
     Driver& drv;
