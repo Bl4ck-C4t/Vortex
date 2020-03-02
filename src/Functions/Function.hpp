@@ -34,7 +34,7 @@ class Function: public Var{
     Function() {}
 
     Function(std::string nm, Type r_type, FuncType ft):
-        ret_type_(r_type), Var(r_type, nm, rvalue()) {}
+        ret_type_(r_type), function_type_(ft), Var(r_type, nm, rvalue()) {}
 
     std::string getBody() const {
         return getValue().getValue<std::string>();
@@ -42,6 +42,10 @@ class Function: public Var{
 
     std::vector<Var> getArgs() const{
         return arg_list_;
+    }
+
+    FuncType getFuncType() const{
+        return function_type_;
     }
 
     bool operator==(Function other){

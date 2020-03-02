@@ -7,7 +7,7 @@
 #include "../Driver/driver.hpp"
 #include "../Classes/Instance.hpp"
 #include "Function.hpp"
-
+class Instance;
 class NativeFunc: public Function{
     using T = std::function<void(std::vector<rvalue>&&, Driver&)>;
     public:

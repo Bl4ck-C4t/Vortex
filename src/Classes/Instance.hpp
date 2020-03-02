@@ -16,7 +16,7 @@ class Instance{
     Instance(Class ref_class):
         class_(ref_class) {
             for(auto it = ref_class.getProps().begin(); it != ref_class.getProps().end(); it++){
-                properties_[it->first] = new Var(*(it->second));
+                properties_[(std::string)it->first] = new Var(*(it->second));
             }
         }
 
@@ -39,7 +39,7 @@ class Instance{
         }
 
         Function& f = (Function&)v;
-        switch (f.getType)
+        switch (f.getFuncType())
         {
         case FuncType::VORTEX:
             class_.getDriver().runFunc(f, std::move(args));
