@@ -7,6 +7,8 @@
 #include "../Utility/RefMap.hpp"
 #include "../Functions/FunctionCall.hpp"
 #include "../Functions/StandardLib.hpp"
+#include "../Classes/Class.hpp"
+#include "../Classes/Instance.hpp"
 #include <map>
 #include <stack>
 
@@ -41,9 +43,10 @@ public:
   Driver() {
       Function f = Function("main", Type::VOID, std::vector<Var>(), "");
       FunctionCall call = FunctionCall(f);
-      StdLib lib();
-      for(auto it = lib.classes.begin(); it != lib.classes.end(); it++){
-          call.getScope().classes[it->getName()] = *it;
+      StdLib lib(*this);
+      for(int i = 0; i < lib.classes.size(); i++) {
+          Class cls = lib.classes[i];
+          call.getScope().classes[cls.getName()] = cls;
       }
 
 

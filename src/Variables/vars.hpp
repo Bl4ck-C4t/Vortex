@@ -71,6 +71,10 @@ class rvalue{
         return std::any_cast<T>(value);
     }
 
+    void setValue(std::any val){
+        value = val;
+    }
+
     friend std::ostream& operator<<(std::ostream& o, rvalue r);
 
     rvalue operator+(rvalue other);

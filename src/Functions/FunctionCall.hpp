@@ -6,6 +6,7 @@
 #include "../Classes/Class.hpp"
 #include <vector>
 #include <string>
+class Class;
 struct Scope{
     RefMap<std::string, Var> variables;
     RefMap<std::string, Function> functions;

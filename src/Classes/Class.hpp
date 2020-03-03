@@ -9,20 +9,22 @@
 #include "../Driver/driver.hpp"
 
 class Class{
-    Driver& drv;
+    Driver* drv = nullptr;
     std::string name_;
     std::map<std::string, Var*> properties_;
 
      public:
      
       Class(std::string nm, std::vector<Var*>&& vec, Driver& driver):
-     name_(nm), drv(driver) {
+     name_(nm), drv(&driver) {
          for (int i = 0; i < vec.size(); i++)
          {
              properties_[vec[i]->getName()] = vec[i];
          }
 
      }
+
+     Class() {}
 
      std::string getName() const{
          return name_;
@@ -33,7 +35,7 @@ class Class{
      }
 
      Driver& getDriver() const{
-         return drv;
+         return *drv;
      }
 
 

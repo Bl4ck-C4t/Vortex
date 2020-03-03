@@ -16,6 +16,9 @@ class NativeFunc: public Function{
     NativeFunc(std::string nm, Type r_type, const T& body):
      body_(body), Function(nm, r_type, FuncType::NATIVE) {}
 
+    NativeFunc(std::string nm, Type r_type):
+        Function(nm, r_type, FuncType::NATIVE) {}
+
     virtual void call(std::vector<rvalue>&& args, Driver& drv){
          body_(std::move(args), drv);
      }
@@ -27,7 +30,7 @@ class NativeMethod: public NativeFunc{
         T body_;
     template<typename T>
     NativeMethod(std::string nm, Type r_type, const T& body):
-     body_(body), Function(nm, r_type, FuncType::NATIVE) {}
+     body_(body), NativeFunc(nm, r_type) {}
 
      void call(std::vector<rvalue>&& args, Instance& inst, Driver& drv){
          body_(std::move(args), inst, drv);
