@@ -35,8 +35,10 @@ Instance::callMethod(std::string name, std::vector<rvalue>&& args, Driver& drv){
         break;
 
     case FuncType::NATIVE:
+        {
         NativeMethod& fun = (NativeMethod&)f;
         fun.call(std::move(args), *this, drv);
+        }
         break;
     
     default:

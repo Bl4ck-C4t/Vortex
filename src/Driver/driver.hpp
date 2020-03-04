@@ -13,9 +13,7 @@
 #include <stack>
 
 
-
 typedef struct yy_buffer_state *YY_BUFFER_STATE;
-
 class Driver{
     std::string file;
   // Whether to generate parser debug traces.

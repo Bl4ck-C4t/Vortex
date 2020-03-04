@@ -6,8 +6,8 @@
 #include "../Variables/vars.hpp"
 #include "../Utility/RefMap.hpp"
 #include "../Functions/Function.hpp"
-#include "../Driver/driver.hpp"
 
+class Driver;
 class Class{
     Driver* drv = nullptr;
     std::string name_;
@@ -15,14 +15,7 @@ class Class{
 
      public:
      
-      Class(std::string nm, std::vector<Var*>&& vec, Driver& driver):
-     name_(nm), drv(&driver) {
-         for (int i = 0; i < vec.size(); i++)
-         {
-             properties_[vec[i]->getName()] = vec[i];
-         }
-
-     }
+      Class(std::string nm, std::vector<Var*>&& vec, Driver& driver);
 
      Class() {}
 
