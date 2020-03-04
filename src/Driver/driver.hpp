@@ -38,19 +38,7 @@ class Driver{
   bool returnLast_ = true;
 
 public:
-  Driver() {
-      Function f = Function("main", Type::VOID, std::vector<Var>(), "");
-      FunctionCall call = FunctionCall(f);
-      StdLib lib(*this);
-      for(int i = 0; i < lib.classes.size(); i++) {
-          Class cls = lib.classes[i];
-          call.getScope().classes[cls.getName()] = cls;
-      }
-
-
-
-      callStack_.push(std::move(call));
- }
+  Driver();
 
 
   int parse (const std::string& f);

@@ -13,6 +13,18 @@ void shiftUp(T* arr, int elements){
     }
 }
 
+Driver::Driver() {
+    Function f = Function("main", Type::VOID, std::vector<Var>(), "");
+    FunctionCall call = FunctionCall(f);
+    StdLib lib(*this);
+    for(int i = 0; i < lib.classes.size(); i++) {
+        Class cls = lib.classes[i];
+        call.getScope().classes[cls.getName()] = cls;
+    }
+
+    callStack_.push(std::move(call));
+}
+
 int
 Driver::evaluate(const char* body){
     auto bp = scan_string(body);
