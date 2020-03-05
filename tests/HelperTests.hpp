@@ -2,7 +2,7 @@
 #define HELPER_FILE
 
 #include <catch2/catch.hpp>
-#include "../src/Driver/driver.hh"
+#include "../src/Driver/driver.hpp"
 #include "../precompiled/parser.hh"
 #include "../src/Variables/vars.hpp"
 #include <iostream>

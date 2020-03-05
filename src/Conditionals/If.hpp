@@ -1,7 +1,7 @@
 #ifndef IFHPP
 #define IFHPP
 #include "../Functions/FunctionCall.hpp"
-#include "../Driver/driver.hh"
+#include "../Driver/driver.hpp"
 
 class Conditional: public FunctionCall{
     public:

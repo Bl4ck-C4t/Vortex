@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include "precompiled/parser.hh"
-#include "src/Driver/driver.hh"
+#include "src/Driver/driver.hpp"
 yy::parser::symbol_type yylex(Driver& drv);
 
 int main(){

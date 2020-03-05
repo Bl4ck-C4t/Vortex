@@ -2,7 +2,7 @@
 #define PARSERTEST_HH
 
 #include <catch2/catch.hpp>
-#include "../src/Driver/driver.hh"
+#include "../src/Driver/driver.hpp"
 #include "../precompiled/parser.hh"
 
 // #include "HelperTests.hpp"
