@@ -43,6 +43,9 @@ $(OBJS)/%.o: %.cc
 $(BASE): $(INTER_INCLUDES) $(OUTS) $(OBJS)/main.o
 	$(CXX) $^ -g -o $@ 
 
+test: $(ALL_SOURCES) $(INTER_INCLUDES) $(OBJS)/main.o
+	$(CXX) $^ -g -o $(OUT)/vortex
+
 parser: $(INTER_INCLUDES)
 
 tests: %: $(OUT)/%

@@ -34,7 +34,7 @@ class Function: public Var{
     Function() {}
 
     Function(std::string nm, Type r_type, FuncType ft):
-        ret_type_(r_type), function_type_(ft), Var(r_type, nm, rvalue()) {}
+        ret_type_(r_type), function_type_(ft), Var(r_type, nm, rvalue(Type::FUNC, this)) {}
 
     std::string getBody() const {
         return getValue().getValue<std::string>();

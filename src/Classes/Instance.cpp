@@ -3,7 +3,9 @@
 Instance::Instance(Class ref_class):
 class_(ref_class) {
     for(auto it = ref_class.getProps().begin(); it != ref_class.getProps().end(); it++){
-        properties_[(std::string)it->first] = new Var(*(it->second));
+        if(it->second->getValue().getType() != Type::FUNC){
+            properties_[(std::string)it->first] = new Var(*(it->second));        
+        }
     }
 }
 
