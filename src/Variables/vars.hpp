@@ -75,6 +75,15 @@ class rvalue{
         value = val;
     }
 
+    void setValue(Type tp, std::any val){
+        value = val;
+        type = tp;
+    }
+
+    void setType(Type tp){
+        type = tp;
+    }
+
     friend std::ostream& operator<<(std::ostream& o, rvalue r);
 
     rvalue operator+(rvalue other);
@@ -121,7 +130,11 @@ struct Var{
 
     void setValue(rvalue&& n_val){
         value = std::move(n_val);
-        var_type = n_val.getType();
+    }
+
+    void setValue(Type tp, std::any n_val){
+        value.setValue(tp, std::move(n_val));
+        var_type = tp;
     }
 
     bool operator==(const Var other) const{

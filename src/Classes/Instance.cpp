@@ -8,6 +8,11 @@ class_(ref_class) {
         }
     }
 }
+Class& 
+Instance::getClass(){
+    return class_;
+}
+
 
 Var& 
 Instance::getProp(std::string name){
@@ -25,7 +30,7 @@ Instance::callMethod(std::string name, std::vector<rvalue>&& args, Driver& drv){
             throw FunctionNotDefined("Function '" + name + "' does not exist.");
     }
     Var& v = *(props[name]);
-    if(v.getType() != Type::FUNC){
+    if(v.getValue().getType() != Type::FUNC){
         throw ParserException("property with name '" + name + "' is not callable.");
     }
 

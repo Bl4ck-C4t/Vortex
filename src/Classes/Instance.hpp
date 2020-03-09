@@ -19,6 +19,8 @@ class Instance{
     Var& getProp(std::string name);
 
     void callMethod(std::string name, std::vector<rvalue>&& args, Driver& drv);
+
+    Class& getClass();
 };
 
 

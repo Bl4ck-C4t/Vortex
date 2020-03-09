@@ -163,13 +163,15 @@ Driver::loop(std::string body){ // a = 3; loop { a = a + 2; if(a == 9) { break; 
 
 rvalue 
 Driver::makeVector(std::vector<rvalue>&& args){
+    // std::any h = args;
+    std::vector<rvalue> method_args =  {rvalue(Type::OBJECT, args)};
     Class& vec_class = callStack_.top().getScope().classes.get("vector");
-    Instance vector_instance(vec_class);
-    vector_instance.callMethod("construct", {rvalue(Type::OBJECT, std::move(args))}, *this);
+    Instance vector_instance(vec_class);   
+    vector_instance.callMethod("construct",std::move(method_args), *this);
     return rvalue(Type::OBJECT, vector_instance);
 }
 // if (true) { 20 }
-
+// s
 
 
 void 
