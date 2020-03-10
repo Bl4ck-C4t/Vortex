@@ -14,9 +14,6 @@ OUTS := $(addprefix $(OBJS)/, $(notdir $(OUTS)))
 TEST_OBJ := $(wildcard $(TESTS)/*.cpp)
 TEST_OBJ := $(addprefix $(OBJS)/, $(notdir $(TEST_OBJ)))
 TEST_OBJ := $(TEST_OBJ:.cpp=.o)
-define make_obj= 
-$(CXX) $^ -c -g -o $@
-endef
 
 all: $(BASE)
 
@@ -32,19 +29,16 @@ $(PRECOMP)/lexer.cc: $(SOURCE)/Flex-and-Bison/*.l
 	$(CXX) $< -c -o $(OBJS)/$(@F)
 
 $(TEST_OBJ): $(OBJS)/%.o: $(TESTS)/%.cpp
-	$(make_obj)
+	$(CXX) $^ -c -o $@
 
 $(INTER_INCLUDES): $(OBJS)/%.o: $(PRECOMP)/%.cc
-	$(make_obj)
+	$(CXX) $^ -c -o $@
 
 $(OBJS)/%.o: %.cc
-	$(make_obj)
+	$(CXX) $^ -c -o $@
 
 $(BASE): $(INTER_INCLUDES) $(OUTS) $(OBJS)/main.o
 	$(CXX) $^ -g -o $@ 
-
-debug: $(ALL_SOURCES) $(INTER_INCLUDES) $(OBJS)/main.o
-	$(CXX) $^ -g -o $(OUT)/vortex
 
 parser: $(INTER_INCLUDES)
 

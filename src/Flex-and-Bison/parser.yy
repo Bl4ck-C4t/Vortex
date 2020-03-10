@@ -152,7 +152,7 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
 | exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();
-      inst.callMethod($SYMBOL, std::move($args), drv);}
+      inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
 | bool_exp 
 | if_stmnt {$$=rvalue(Type::BOOL, $1);}
 ;

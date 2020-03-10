@@ -14,7 +14,7 @@ class Instance{
     RefMap<std::string, Var*> properties_;
     public:
 
-    Instance(Class ref_class);
+    Instance(Class& ref_class);
 
     Var& getProp(std::string name);
 

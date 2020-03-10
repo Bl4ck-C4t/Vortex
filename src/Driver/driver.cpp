@@ -164,10 +164,12 @@ Driver::loop(std::string body){ // a = 3; loop { a = a + 2; if(a == 9) { break; 
 rvalue 
 Driver::makeVector(std::vector<rvalue>&& args){
     // std::any h = args;
-    std::vector<rvalue> method_args =  {rvalue(Type::OBJECT, args)};
+    
     Class& vec_class = callStack_.top().getScope().classes.get("vector");
-    Instance vector_instance(vec_class);   
-    vector_instance.callMethod("construct",std::move(method_args), *this);
+    Instance vector_instance(vec_class); 
+    // std::vector<rvalue> method_args =  {rvalue(Type::OBJECT, args)};  
+    
+    vector_instance.callMethod("construct", {rvalue(Type::OBJECT, std::move(args))}, *this);
     return rvalue(Type::OBJECT, vector_instance);
 }
 // if (true) { 20 }
@@ -242,10 +244,25 @@ std::ostream& operator<<(std::ostream& o, rvalue r){
                 o << res;
                 break;
             case Type::OBJECT:
+            {
                 //res = std::any_cast<bool>(r.getValue()) ? "true" : "false";
+                Instance ins = r.getValue<Instance>();
+                if(ins.getClass().getName() == "vector"){
+                    const std::vector<rvalue>& vec = ins.getProp("vec").getValue<std::vector<rvalue>>();
+                    std::cout << "[";
+                    for(int i = 0; i < vec.size(); i++){
+                        std::cout << vec[i];
+                        if(i < vec.size()-1){
+                            std::cout << ", ";
+                        }
+                    }
+                    std::cout << "]" << std::endl;
+
+                }
                 res = "object";
                 o << res;
                 break;
+            }
             
             default:
                 break;

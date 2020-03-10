@@ -1,6 +1,6 @@
 #include "Instance.hpp"
 
-Instance::Instance(Class ref_class):
+Instance::Instance(Class& ref_class):
 class_(ref_class) {
     for(auto it = ref_class.getProps().begin(); it != ref_class.getProps().end(); it++){
         if(it->second->getValue().getType() != Type::FUNC){

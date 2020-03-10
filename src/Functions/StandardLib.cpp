@@ -15,9 +15,6 @@ StdLib::StdLib(Driver& drv) {
             Var& var_vec = inst.getProp("vec");
             auto vec = var_vec.getValue<std::vector<rvalue>>();
             vec.push_back(std::move(rv));
-            for(auto it = vec.begin(); it != vec.end(); ++it){
-                std::cout << *it << std::endl;
-            }
             var_vec.setValue(Type::OBJECT, vec);
         })
     };
