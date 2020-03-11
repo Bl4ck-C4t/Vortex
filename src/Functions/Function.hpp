@@ -25,19 +25,20 @@ class Function: public Var{
 
     Type ret_type_;
     std::vector<Var> arg_list_;
+    std::string body_;
     FuncType function_type_ = FuncType::VORTEX;
 
    public:
     Function(std::string nm, Type r_type, std::vector<Var>&& vec, std::string body):
-     ret_type_(r_type), arg_list_(std::move(vec)), Var(r_type, nm, rvalue(Type::FUNC, this)) {}
+     ret_type_(r_type), body_(body), arg_list_(std::move(vec)), Var(r_type, nm, rvalue(Type::FUNC, this)) {}
 
     Function() {}
 
     Function(std::string nm, Type r_type, FuncType ft):
         ret_type_(r_type), function_type_(ft), Var(r_type, nm, rvalue(Type::FUNC, this)) {}
 
-    std::string getBody() const {
-        return getValue().getValue<std::string>();
+    std::string getBody() const{
+        return body_;
     }
 
     std::vector<Var> getArgs() const{

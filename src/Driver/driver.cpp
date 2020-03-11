@@ -93,8 +93,6 @@ Driver::createParser(){
 
 void
 Driver::declareFunction(Function&& f){
-    std::cout << f.getName() << std::endl;
-    std::cout << f.getBody() << std::endl;
     auto& functions = getScope().functions;
     if(functions.contains(f.getName())){
         throw FunctionDefinedException("Function '" + f.getName() + "' Already defined");
@@ -231,11 +229,11 @@ std::ostream& operator<<(std::ostream& o, rvalue r){
                 break;
 
             case Type::CHAR:
-                o << std::any_cast<char>(r.getValue());
+                o << "'" << std::any_cast<char>(r.getValue()) << "'";
                 break;
 
             case Type::STRING:
-                o << std::any_cast<std::string>(r.getValue());
+                o << '"' << std::any_cast<std::string>(r.getValue()) << '"';
                 break;
 
             case Type::FLOAT:

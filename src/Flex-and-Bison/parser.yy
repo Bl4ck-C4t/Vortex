@@ -133,7 +133,7 @@ decl: TYPE SYMBOL "=" exp ";" {drv.setVariable(Var($1, $2, $exp)); $$=std::move(
 
 %left "==" ">" "<" ">=" "<=" "!=";
 %left "+" "-";
-%left "*" "/" ".";
+%left "*" "/" "." "[";
 %precedence NEG;
 
 %type <rvalue> exp;
@@ -150,6 +150,8 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "/" exp {$$= $1 / $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
+| exp "[" args "]" {Instance inst = $1.getValue<Instance>();
+      inst.callMethod("atIndex", std::move($args), drv);  $$=drv.getLastValue();}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
 | exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();
       inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
