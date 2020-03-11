@@ -47,11 +47,12 @@ class rvalue{
     Type type;
     std::any value;
 
-    void setupOperations();
     public:
-    OperationExecutor* operations;
 
-    rvalue(Type tp, std::any vl): type(tp), value(vl) {setupOperations();}
+    static void setupOperations();
+    static OperationExecutor* operations;
+
+    rvalue(Type tp, std::any vl): type(tp), value(vl) {}
     rvalue(): type(Type::VOID), value(42) {}
 
     Type getType() const {

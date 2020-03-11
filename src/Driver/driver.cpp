@@ -14,6 +14,7 @@ void shiftUp(T* arr, int elements){
 }
 
 Driver::Driver() {
+    rvalue::setupOperations();
     Function f = Function("main", Type::VOID, std::vector<Var>(), "");
     FunctionCall call = FunctionCall(f);
     StdLib lib(*this);
@@ -92,6 +93,8 @@ Driver::createParser(){
 
 void
 Driver::declareFunction(Function&& f){
+    std::cout << f.getName() << std::endl;
+    std::cout << f.getBody() << std::endl;
     auto& functions = getScope().functions;
     if(functions.contains(f.getName())){
         throw FunctionDefinedException("Function '" + f.getName() + "' Already defined");

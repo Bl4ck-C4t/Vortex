@@ -123,10 +123,7 @@ rvalue::operator!=(rvalue other){
     }
 }
 
-
-
-
-
+OperationExecutor* rvalue::operations = nullptr;
 
 void 
 rvalue::setupOperations() {
@@ -150,9 +147,6 @@ rvalue::setupOperations() {
         operations->addOperation(new CompareString());
         operations->addOperation(new GreaterThanStringBool());
         operations->addOperation(new LessThenStringBool());
-
-
-        
 
 }
 
