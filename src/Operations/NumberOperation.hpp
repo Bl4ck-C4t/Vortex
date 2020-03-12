@@ -10,7 +10,7 @@ class NumberOperation: public Operation{
     bool match(rvalue lhs, rvalue rhs, std::string operation) const
     {
         return getOper() == operation && \
-        ((lhs.getType() == Type::INT || lhs.getType() == Type::FLOAT) || (rhs.getType() == Type::INT || rhs.getType() == Type::FLOAT));
+        ((lhs.getType() == Type::INT || lhs.getType() == Type::FLOAT) && (rhs.getType() == Type::INT || rhs.getType() == Type::FLOAT));
     }
 
     rvalue execute(rvalue lhs, rvalue rhs) const {

@@ -10,7 +10,7 @@ class StringBoolOper: public Operation{
     bool match(rvalue lhs, rvalue rhs, std::string operation) const
     {
         return getOper() == operation && \
-        ((lhs.getType() == Type::STRING || lhs.getType() == Type::CHAR) || (rhs.getType() == Type::STRING || rhs.getType() == Type::CHAR));
+        ((lhs.getType() == Type::STRING || lhs.getType() == Type::CHAR) && (rhs.getType() == Type::STRING || rhs.getType() == Type::CHAR));
     }
 
     rvalue execute(rvalue lhs, rvalue rhs) const {

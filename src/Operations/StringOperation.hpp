@@ -9,7 +9,7 @@ public:
     bool match(rvalue lhs, rvalue rhs, std::string operation) const
     {
         return getOper() == operation && \
-        ((lhs.getType() == Type::CHAR || lhs.getType() == Type::STRING) || (rhs.getType() == Type::CHAR || rhs.getType() == Type::STRING));
+        ((lhs.getType() == Type::CHAR || lhs.getType() == Type::STRING) && (rhs.getType() == Type::CHAR || rhs.getType() == Type::STRING));
     }
 
     rvalue execute(rvalue lhs, rvalue rhs) const {
