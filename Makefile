@@ -48,6 +48,11 @@ debug: $(ALL_SOURCES) $(INTER_INCLUDES) $(OBJS)/main.o
 
 parser: $(INTER_INCLUDES)
 
+lexer: $(OUT)/lexer
+
+$(OUT)/lexer: $(INTER_INCLUDES) $(OUTS) $(OBJS)/debugMain.o
+	$(CXX) $^ -g -o $@
+
 tests: %: $(OUT)/%
 
 $(OUT)/tests: $(INTER_INCLUDES) $(OUTS) $(TEST_OBJ) $(TESTS)/*.hpp
