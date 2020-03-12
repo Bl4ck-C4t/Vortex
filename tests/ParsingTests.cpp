@@ -45,6 +45,13 @@ auto generateValueCheckers(Driver& drv){
 
 }
 
+auto generateVectorChecks(Driver& drv){
+    auto f1= [&drv]()->std::vector<rvalue>{
+        return drv.getLastValue().getValue<Instance>().getProp("vec").getValue<std::vector<rvalue>>();
+    };
+    return f1;
+}
+
 
 TEST_CASE("Test variable creation"){
     Driver drv;
@@ -168,6 +175,55 @@ TEST_CASE("Functions"){
         exec("fact(4)");
 
         t_and_v_check(Type::INT, 24);
+    }
+}
+
+TEST_CASE("Vectors"){
+    Driver drv;
+    auto exec = generateExecutor(drv);
+    const auto& [type_checker, value_checker, t_and_v_check] = generateValueCheckers(drv);
+    const auto& vectorGet = generateVectorChecks(drv);
+
+    SECTION("Creation"){
+        exec("[]");
+        type_checker(Type::OBJECT);
+
+        exec("a = [\"help\", true, 3.4, 100, 'c'];");
+        exec("a[0]");
+        t_and_v_check(Type::STRING, std::string("help"));
+        exec("a[1]");
+        t_and_v_check(Type::BOOL, true);
+        exec("a[2]");
+        t_and_v_check(Type::FLOAT, 3.4f);
+        exec("a[3]");
+        t_and_v_check(Type::INT, 100);
+        exec("a[4]");
+        t_and_v_check(Type::CHAR, 'c');
+    }
+
+    SECTION("Methods"){
+        exec("[].len()");
+        t_and_v_check(Type::INT, 0);
+
+         exec("a = [\"help\", true, 3.4, 100, 'c'];");
+
+         exec("a.len()");
+         t_and_v_check(Type::INT, 5);
+
+         exec("a.remove(0)");
+         exec("a.len()");
+         t_and_v_check(Type::INT, 4);
+
+         exec("a[0]");
+         t_and_v_check(Type::BOOL, true);
+
+         exec("a.push('c')");
+
+         exec("a.len()");
+         t_and_v_check(Type::INT, 5);
+
+         exec("a[4]");
+         t_and_v_check(Type::CHAR, 'c');
     }
 }
 
