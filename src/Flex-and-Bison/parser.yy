@@ -160,13 +160,13 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 ;
 
 %type <bool> bool;
-bool: BOOL
-| bool_exp {$$=$1.getValue<bool>();} 
+bool:
+ bool_exp {$$=$1.getValue<bool>();} 
 ;
 
 %type <rvalue> bool_exp;
-bool_exp:
- exp "==" exp {$$=$1 == $3;}
+bool_exp: BOOL {$$=rvalue(Type::BOOL, $1);}
+| exp "==" exp {$$=$1 == $3;}
 | exp ">" exp {$$=$1 > $3;}
 | exp "<" exp {$$=$1 < $3;}
 | exp ">=" exp {$$=$1 >= $3;}
