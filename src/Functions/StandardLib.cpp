@@ -23,12 +23,17 @@ StdLib::StdLib(Driver& drv) {
             vec.erase(vec.begin() + rv.getValue<int>());
             var_vec.setValue(Type::OBJECT, vec);
         }),
-        new NativeMethod("atIndex", Type::VOID, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
+        new NativeMethod("atIndex", Type::OBJECT, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
             int index = r_args[0].getValue<int>();
             Var& var_vec = inst.getProp("vec");
             auto vec = var_vec.getValue<std::vector<rvalue>>();
             rvalue& element = vec[index];
             drv.setLastValue(rvalue(element));
+        }),
+        new NativeMethod("len", Type::INT, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
+            Var& var_vec = inst.getProp("vec");
+            auto vec = var_vec.getValue<std::vector<rvalue>>();
+            drv.setLastValue(rvalue(Type::INT, (int)vec.size()));
         })
     };
     Class vec = Class("vector",std::move(props), drv);
