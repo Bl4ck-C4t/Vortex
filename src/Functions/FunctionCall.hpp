@@ -15,15 +15,15 @@ struct Scope{
 };
 
 class FunctionCall {
-    const Function& fun;
+    Function& fun;
     Scope MainScope;
 
     public:
-    FunctionCall(const Function& f): fun(f) {}
+    FunctionCall(Function& f): fun(f) {}
 
-    FunctionCall(const Function& f, std::vector<rvalue>&& args): FunctionCall(f) {
+    FunctionCall(Function& f, std::vector<rvalue>&& args): FunctionCall(f) {
 
-        std::vector<Var> f_args = fun.getArgs();
+        std::vector<Var>& f_args = fun.getArgs();
         if(f_args.size() != args.size()){
             throw ParserException("Function '" + f.getName() + "' expects " + std::to_string(f_args.size()) + 
             " arguments, but " + std::to_string(args.size()) + " provided.");

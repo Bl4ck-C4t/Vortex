@@ -38,6 +38,7 @@ Instance::callMethod(std::string name, std::vector<rvalue>&& args, Driver& drv){
     switch (f.getFuncType())
     {
     case FuncType::VORTEX:
+        args.insert(args.begin(), rvalue(Type::OBJECT, *this));
         class_.getDriver().runFunc(f, std::move(args));
         break;
 

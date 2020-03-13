@@ -41,7 +41,7 @@ class Function: public Var{
         return body_;
     }
 
-    std::vector<Var> getArgs() const{
+    std::vector<Var>& getArgs(){
         return arg_list_;
     }
 
