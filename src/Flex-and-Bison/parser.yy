@@ -95,7 +95,7 @@ clause: exp
 
 
 statement:
-  "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
+  "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(new Function($2, $7, std::move($args_d), $body));}
 | "import" FILEPATH {drv.executeFile($2);}
 | "loop" "{" body "}" { while(true) { int res = drv.loop($body); if(res == 2){ break; } } }
 | "class" SYMBOL "{" declarations "}" {drv.declareClass(Class($SYMBOL, std::move($declarations), drv));}

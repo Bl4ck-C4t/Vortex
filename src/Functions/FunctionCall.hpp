@@ -9,7 +9,7 @@
 class Class;
 struct Scope{
     RefMap<std::string, Var> variables;
-    RefMap<std::string, Function> functions;
+    RefMap<std::string, Function*> functions;
     RefMap<std::string, Class> classes;
     Scope() {}
 };

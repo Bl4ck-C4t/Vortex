@@ -92,14 +92,14 @@ Driver::createParser(){
 }
 
 void
-Driver::declareFunction(Function&& f){
+Driver::declareFunction(Function* f){
     auto& functions = getScope().functions;
-    if(functions.contains(f.getName())){
-        throw FunctionDefinedException("Function '" + f.getName() + "' Already defined");
+    if(functions.contains(f->getName())){
+        throw FunctionDefinedException("Function '" + f->getName() + "' Already defined");
     }
     // std::string full_name = f.getName() + " " + ""
     // rm[f.getName()];
-    functions[f.getName()] = std::move(f);
+    functions[f->getName()] = f;
 }
 
 
@@ -111,7 +111,7 @@ Driver::callFunction(std::string name, std::vector<rvalue> args){
     if(!functions.contains(name)){
         throw FunctionNotDefined("Function '" + name + "' does not exist.");
     }
-    const Function& func = functions.get(name);
+    const Function& func = *(functions.get(name));
     FunctionCall call = FunctionCall(func, std::move(args));
     call.setFunctionRef(getScope());
     callStack_.push(call);

@@ -55,7 +55,7 @@ public:
 
   void setVariable(Var&& var);
 
-  void declareFunction(Function&& f);
+  void declareFunction(Function* f);
 
   void declareClass(Class&& cls);
 
