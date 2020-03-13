@@ -227,6 +227,33 @@ TEST_CASE("Vectors"){
     }
 }
 
+TEST_CASE("Classes"){
+    Driver drv;
+    auto exec = generateExecutor(drv);
+    const auto& [type_checker, value_checker, t_and_v_check] = generateValueCheckers(drv);
+    SECTION("Declaration with extending"){
+        drv.executeFile("/home/blackcat/school/Vortex/tests/TestFiles/classes.vx");
+
+    }
+
+    SECTION("Instances test"){
+        drv.executeFile("/home/blackcat/school/Vortex/tests/TestFiles/classes.vx");
+
+        exec("chorbi = new God(20, \"Chorbi\", [\"Programming\", \"Reading documentation\"]);");
+        type_checker(Type::OBJECT);
+        exec("chorbi.getName()");
+        t_and_v_check(Type::STRING, std::string("Chorbi"));
+        exec("chorbi.getPowers()[0]");
+        t_and_v_check(Type::STRING, std::string("Programming"));
+
+        exec("stefo = new Person(18, \"Stefan\");");
+        type_checker(Type::OBJECT);
+        exec("stefo.getAge()");
+        t_and_v_check(Type::INT, 18);
+
+    }
+}
+
 
 
 #endif
