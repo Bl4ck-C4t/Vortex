@@ -20,6 +20,8 @@
   #include <vector>
   #include "../src/Variables/vars.hpp"
   #include "../src/Functions/Function.hpp"
+  #include "../src/Classes/Class.hpp"
+
   class Driver;
 }
 
@@ -64,6 +66,7 @@
   BREAK "break"
   CLASS "class"
   NEW "new"
+  EXTENDS "extends"
   ;
 
 
@@ -98,7 +101,18 @@ statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(new Function($2, $7, std::move($args_d), $body));}
 | "import" FILEPATH {drv.executeFile($2);}
 | "loop" "{" body "}" { while(true) { int res = drv.loop($body); if(res == 2){ break; } } }
-| "class" SYMBOL "{" declarations "}" {drv.declareClass(Class($SYMBOL, std::move($declarations), drv));}
+| "class" SYMBOL extend.opt bases "{" declarations "}" {Class sel_class($SYMBOL, std::move($declarations), drv);
+  sel_class.extendWithClasses(std::move($bases));drv.declareClass(std::move(sel_class));}
+;
+
+extend.opt:
+  %empty
+| "extends";
+
+%type <std::vector<Class>> bases;
+bases: %empty {}
+| SYMBOL {$$.push_back(drv.getScope().getClass($SYMBOL));}
+| bases "," SYMBOL {$$=$1;$$.push_back(drv.getScope().getClass($SYMBOL));}
 ;
 
 %type <Var*> declaration;

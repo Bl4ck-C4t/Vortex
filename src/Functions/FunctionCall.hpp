@@ -11,6 +11,25 @@ struct Scope{
     RefMap<std::string, Var> variables;
     RefMap<std::string, Function*> functions;
     RefMap<std::string, Class> classes;
+
+    Class& getClass(std::string name){
+        if(!classes.contains(name)){
+            throw NoSuchClassException(name);
+        }
+        return classes.get(name);
+    }
+    Var& getVariable(std::string name){
+        if(!variables.contains(name)){
+            throw ParserException("No variable with name '" + name + "'");
+        }
+        return variables.get(name);
+    }
+    Function* getFunction(std::string name){
+        if(!functions.contains(name)){
+            throw FunctionNotDefined("Function '" + name + "' does not exist.");
+        }
+        return functions.get(name);
+    }
     Scope() {}
 };
 

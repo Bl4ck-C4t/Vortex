@@ -110,12 +110,8 @@ Driver::declareFunction(Function* f){
 
 void 
 Driver::callFunction(std::string name, std::vector<rvalue> args){
-    auto& functions = getScope().functions;
-
-    if(!functions.contains(name)){
-        throw FunctionNotDefined("Function '" + name + "' does not exist.");
-    }
-    Function& func = *(functions.get(name));
+    
+    Function& func = *(getScope().getFunction(name));
     if(func.getFuncType() == FuncType::NATIVE){
         ((NativeFunc&)func).call(std::move(args), *this);
         return;
@@ -195,11 +191,8 @@ Driver::declareClass(Class&& cls){
 
 rvalue 
 Driver::makeInstance(std::string className, std::vector<rvalue>&& args){
-    auto& classes = getScope().classes;
-    if(!classes.contains(className)){
-        throw ParserException("Class '" + className + "' doesn't exist");
-    }
-    Class& instance_class = callStack_.top().getScope().classes.get(className);
+
+    Class& instance_class = callStack_.top().getScope().getClass(className);
     Instance new_instance(instance_class); 
     new_instance.callMethod("construct", std::move(args), *this);
     return rvalue(Type::OBJECT, new_instance);

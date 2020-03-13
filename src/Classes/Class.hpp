@@ -8,6 +8,10 @@
 #include "../Functions/Function.hpp"
 
 class Driver;
+class NoSuchClassException: public ParserException{
+    public:
+    NoSuchClassException(std::string className): ParserException("Class '" + className + "' doesn't exist") {}
+};
 class Class{
     Driver* drv = nullptr;
     std::string name_;
@@ -18,6 +22,8 @@ class Class{
       Class(std::string nm, std::vector<Var*>&& vec, Driver& driver);
 
      Class() {}
+
+     void extendWithClasses(std::vector<Class>&& classes);
 
      std::string getName() const{
          return name_;

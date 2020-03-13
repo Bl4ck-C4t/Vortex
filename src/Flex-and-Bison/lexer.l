@@ -75,6 +75,7 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 "loop"     return yy::parser::make_LOOP            (loc);
 "break"    return yy::parser::make_BREAK           (loc);
 "new"      return yy::parser::make_NEW             (loc);
+"extends"  return yy::parser::make_EXTENDS         (loc);
 
 "class"    BEGIN(CLASS_S);return yy::parser::make_CLASS(loc);
 <CLASS_S>"{" BEGIN(INITIAL); return yy::parser::make_LCURLY(loc);

@@ -13,3 +13,13 @@ class T1{
     }
 }
 
+class T2 extends T1 {
+    int h;
+    fn construct(int a1, float abc1, int h1) -> void{
+        this.a = a1;
+        this.abc = abc1;
+        this.h = h1;
+        ret;
+    }
+
+}
