@@ -297,7 +297,7 @@ std::ostream& operator<<(std::ostream& o, rvalue r){
                 break;
             }
     }catch(std::bad_any_cast e){
-        o << "Bad cast";
+        o << "Error: Object of value is not corresponding to its type";
     }
     return o;
 }

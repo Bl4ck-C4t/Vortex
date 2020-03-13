@@ -165,6 +165,7 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
 | exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();
       inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
+| exp "." SYMBOL {Instance inst = $1.getValue<Instance>(); $$=inst.getProp($SYMBOL).getValue();}
 | "new" SYMBOL "(" args ")" {$$=drv.makeInstance($SYMBOL, std::move($args));}
 | bool_exp 
 | if_stmnt {$$=rvalue(Type::BOOL, $1);}
