@@ -109,6 +109,7 @@ struct Var{
 
     Var(Type tp, std::string nm, rvalue r): var_type(tp), name(nm), value(r) {}
     Var(Type tp, std::string nm): var_type(tp), name(nm) {}
+    Var(std::string nm): name(nm) {}
 
     Var() {}
 
@@ -131,6 +132,7 @@ struct Var{
 
     void setValue(rvalue&& n_val){
         value = std::move(n_val);
+        var_type = value.getType();
     }
 
     void setValue(Type tp, std::any n_val){

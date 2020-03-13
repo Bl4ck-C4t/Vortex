@@ -143,6 +143,8 @@ arg: exp
 %left "==" ">" "<" ">=" "<=" "!=";
 %left "+" "-";
 %left "*" "/" "." "[";
+%precedence SYMBOL;
+%right "=";
 %precedence NEG;
 
 %type <rvalue> exp;
@@ -150,9 +152,9 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | STRING {$$=rvalue(Type::STRING, $1);}
 | FLOAT {$$=rvalue(Type::FLOAT, $1);}
 | CHAR {$$=rvalue(Type::CHAR, $1);}
-| SYMBOL {$$=drv.getVariable($1).getValue();}
-| TYPE SYMBOL "=" exp ";" {drv.setVariable(Var($1, $2, $4)); $$=std::move($4);}
-| SYMBOL "=" exp ";" {drv.setVariable(Var($3.getType(), $1, $3)); $$=std::move($3);}
+| lside {$$=$lside.getValue();}
+| lside "=" exp ";" {$lside.setValue(rvalue($3));drv.setVariable(std::move($lside)); $$=std::move($3);}
+| exp "." SYMBOL "=" exp ";" {Instance inst = $1.getValue<Instance>(); inst.getProp($SYMBOL).setValue(rvalue($5)); $$=std::move($5);}
 | exp[base] "*" "*" exp[power] {$$=$base.pow($power);}
 | exp "+" exp {$$= $1 + $3;}
 | exp "-" exp {$$= $1 - $3;} 
@@ -165,10 +167,15 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
 | exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();
       inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
-| exp "." SYMBOL {Instance inst = $1.getValue<Instance>(); $$=inst.getProp($SYMBOL).getValue();}
 | "new" SYMBOL "(" args ")" {$$=drv.makeInstance($SYMBOL, std::move($args));}
 | bool_exp 
 | if_stmnt {$$=rvalue(Type::BOOL, $1);}
+;
+
+%type <Var> lside;
+lside: TYPE SYMBOL {$$=Var($1, $2);}
+| SYMBOL {if (drv.getScope().variables.contains($SYMBOL)) {$$=drv.getVariable($SYMBOL);} else {$$=Var($SYMBOL);}}
+| exp "." SYMBOL {Instance inst = $1.getValue<Instance>(); $$=inst.getProp($SYMBOL);}
 ;
 
 %type <bool> bool;
