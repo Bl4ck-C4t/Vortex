@@ -13,6 +13,7 @@ class Driver;
 class StdLib{
     public: 
     std::vector<Class> classes;
+    std::vector<NativeFunc*> functions;
     StdLib(Driver& drv);
 };
 

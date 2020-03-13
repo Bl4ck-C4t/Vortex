@@ -1,4 +1,6 @@
 #include "StandardLib.hpp"
+#include <iostream>
+#include "../Variables/vars.hpp"
 
 StdLib::StdLib(Driver& drv) {
 
@@ -39,4 +41,19 @@ StdLib::StdLib(Driver& drv) {
     Class vec = Class("vector",std::move(props), drv);
 
     classes.push_back(vec);
+
+    functions.push_back(new NativeFunc("print", Type::INT, [](std::vector<rvalue>&& r_args, Driver& drv){
+            std::cout << r_args[0] << std::endl;
+        }));
+    functions.push_back(new NativeFunc("input", Type::INT, [](std::vector<rvalue>&& r_args, Driver& drv){
+            if (r_args.size() > 0){
+                if(r_args[0].getType() != Type::STRING){
+                    throw ParserException("First argument of 'input' should be string not " + typeToString(r_args[0].getType()));
+                }
+                std::cout << r_args[0].getValue<std::string>();
+            }
+            std::string input;
+            std::cin >> input;
+            drv.setLastValue(rvalue(Type::STRING, input));
+        }));
 }

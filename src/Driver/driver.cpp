@@ -23,6 +23,10 @@ Driver::Driver() {
         call.getScope().classes[cls.getName()] = cls;
     }
 
+    for(auto it = lib.functions.begin(); it != lib.functions.end(); it++) {
+        call.getScope().functions[(*it)->getName()] = std::move(*it);
+    }
+
     callStack_.push(std::move(call));
 }
 
@@ -112,6 +116,10 @@ Driver::callFunction(std::string name, std::vector<rvalue> args){
         throw FunctionNotDefined("Function '" + name + "' does not exist.");
     }
     const Function& func = *(functions.get(name));
+    if(func.getFuncType() == FuncType::NATIVE){
+        ((NativeFunc&)func).call(std::move(args), *this);
+        return;
+    }
     FunctionCall call = FunctionCall(func, std::move(args));
     call.setFunctionRef(getScope());
     callStack_.push(call);
