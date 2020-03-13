@@ -9,6 +9,11 @@
 #include "Function.hpp"
 #include "NativeFunction.hpp"
 
+class WrongTypeException : public ParserException{
+ public:
+        WrongTypeException(const Type& lhs, const Type& rhs):
+        ParserException("Expected type '" + typeToString(rhs) + "' got '" + typeToString(lhs) + "'") {}
+};
 class Driver;
 class StdLib{
     public: 

@@ -38,6 +38,8 @@ class NoSuchOperation: public ParserException{
         ParserException("No '" + operation + "' operator for " + typeToString(lhs) + " " + operation + " " + typeToString(rhs)) {}
         NoSuchOperation(): ParserException("No such operation with those types") {}
 };
+
+
 class ZeroDivisionException: public ParserException {
     public:
         ZeroDivisionException(std::string msg): ParserException(msg) {}
