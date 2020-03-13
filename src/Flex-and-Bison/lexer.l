@@ -24,6 +24,7 @@ float [0-9]+\.([0-9]+)?
 path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 
 %x BODY_S
+%s CLASS_S
 
 %{
   int brackets = 0;
@@ -73,6 +74,11 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 "import"   return yy::parser::make_IMPORT          (loc);
 "loop"     return yy::parser::make_LOOP            (loc);
 "break"    return yy::parser::make_BREAK           (loc);
+"new"      return yy::parser::make_NEW             (loc);
+
+"class"    BEGIN(CLASS_S);return yy::parser::make_CLASS(loc);
+<CLASS_S>"{" BEGIN(INITIAL); return yy::parser::make_LCURLY(loc);
+"}" return yy::parser::make_RCURLY(loc);
 
 
 

@@ -57,6 +57,10 @@ public:
 
   void declareFunction(Function&& f);
 
+  void declareClass(Class&& cls);
+
+  rvalue makeInstance(std::string className, std::vector<rvalue>&& args);
+
   rvalue makeVector(std::vector<rvalue>&& args);
 
   void callFunction(std::string name, std::vector<rvalue> args);

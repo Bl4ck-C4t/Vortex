@@ -173,6 +173,26 @@ Driver::makeVector(std::vector<rvalue>&& args){
     vector_instance.callMethod("construct", {rvalue(Type::OBJECT, std::move(args))}, *this);
     return rvalue(Type::OBJECT, vector_instance);
 }
+
+void 
+Driver::declareClass(Class&& cls){
+    auto& classes = getScope().classes;
+    if(classes.contains(cls.getName())){
+        throw FunctionDefinedException("Function '" + cls.getName() + "' Already defined");
+    }
+    // std::string full_name = f.getName() + " " + ""
+    // rm[f.getName()];
+    classes[cls.getName()] = std::move(cls);
+}
+
+rvalue 
+Driver::makeInstance(std::string className, std::vector<rvalue>&& args){
+    Class& instance_class = callStack_.top().getScope().classes.get(className);
+    Instance new_instance(instance_class); 
+    new_instance.callMethod("construct", std::move(args), *this);
+    return rvalue(Type::OBJECT, new_instance);
+}
+
 // if (true) { 20 }
 // s
 

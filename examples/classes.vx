@@ -1,0 +1,13 @@
+class T1{
+    int a;
+    float abc;
+
+    fn constructor(int a1, float abc1){
+        this.a = a1;
+        this.abc = abc1;
+    }
+
+    fn f1(int asd) -> int{
+        ret this.a + asd;
+    }
+}

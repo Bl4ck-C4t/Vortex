@@ -62,6 +62,8 @@
   IMPORT "import"
   LOOP "loop"
   BREAK "break"
+  CLASS "class"
+  NEW "new"
   ;
 
 
@@ -96,7 +98,19 @@ statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(Function($2, $7, std::move($args_d), $body));}
 | "import" FILEPATH {drv.executeFile($2);}
 | "loop" "{" body "}" { while(true) { int res = drv.loop($body); if(res == 2){ break; } } }
+| "class" SYMBOL "{" declarations "}" {drv.declareClass(Class($SYMBOL, std::move($declarations), drv));}
 ;
+
+%type <Var*> declaration;
+declaration: 
+ TYPE SYMBOL ";" {$$=new Var($TYPE, $SYMBOL);}
+| "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {$$=new Function($SYMBOL, $TYPE, std::move($args_d), $body);}
+;
+
+%type <std::vector<Var*>> declarations;
+declarations: %empty {}
+| declaration {$$.push_back($declaration);}
+| declarations declaration {$1.push_back($declaration); $$=$1;}
 
 %type <std::string> body;
 body: 
@@ -126,11 +140,6 @@ args:
 arg: exp
 ;
 
-%type <rvalue> decl;
-decl: TYPE SYMBOL "=" exp ";" {drv.setVariable(Var($1, $2, $exp)); $$=std::move($exp);}
-| SYMBOL "=" exp ";" {drv.setVariable(Var($exp.getType(), $1, $exp)); $$=std::move($exp);}
-;
-
 %left "==" ">" "<" ">=" "<=" "!=";
 %left "+" "-";
 %left "*" "/" "." "[";
@@ -142,7 +151,8 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | FLOAT {$$=rvalue(Type::FLOAT, $1);}
 | CHAR {$$=rvalue(Type::CHAR, $1);}
 | SYMBOL {$$=drv.getVariable($1).getValue();}
-| decl
+| TYPE SYMBOL "=" exp ";" {drv.setVariable(Var($1, $2, $4)); $$=std::move($4);}
+| SYMBOL "=" exp ";" {drv.setVariable(Var($3.getType(), $1, $3)); $$=std::move($3);}
 | exp[base] "*" "*" exp[power] {$$=$base.pow($power);}
 | exp "+" exp {$$= $1 + $3;}
 | exp "-" exp {$$= $1 - $3;} 
@@ -155,6 +165,7 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
 | exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();
       inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
+| "new" SYMBOL "(" args ")" {$$=drv.makeInstance($SYMBOL, std::move($args));}
 | bool_exp 
 | if_stmnt {$$=rvalue(Type::BOOL, $1);}
 ;
