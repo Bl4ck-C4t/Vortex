@@ -134,7 +134,7 @@ struct Var{
 
     void setValue(rvalue&& n_val){
         value = std::move(n_val);
-        var_type = value.getType();
+        // var_type = value.getType();
     }
 
     void setValue(Type tp, std::any n_val){

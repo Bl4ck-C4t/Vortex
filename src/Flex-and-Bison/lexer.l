@@ -121,7 +121,7 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 {identifier} { return yy::parser::make_SYMBOL(yytext, loc); }
 
 
-[ \t]+ {loc.step();} 
+[ ]+ {loc.step();loc.columns(yyleng);} 
 . {throw yy::parser::syntax_error
                (loc, "invalid character: " + std::string(yytext));}
 

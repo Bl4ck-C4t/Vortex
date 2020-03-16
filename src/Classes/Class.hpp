@@ -16,6 +16,7 @@ class Class{
     Driver* drv = nullptr;
     std::string name_;
     std::map<std::string, Var*> properties_;
+    // std::vector<int> base_classes_;
 
      public:
      
