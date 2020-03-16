@@ -9,7 +9,7 @@
 // #include "../Operations/SubInt.hpp"
 // #include "../Operations/MulInt.hpp"
 class OperationExecutor;
-enum struct Type { INT, STRING, CHAR, FLOAT, BOOL, VOID, FUNC, OBJECT};
+enum struct Type { INT, STRING, CHAR, FLOAT, BOOL, VOID, FUNC, OBJECT, UNKNOWN};
 
 std::string typeToString(Type tp);
 
@@ -137,6 +137,10 @@ struct Var{
         // var_type = value.getType();
     }
 
+    void setType(Type tp){
+        var_type = tp;
+    }
+
     void setValue(Type tp, std::any n_val){
         value.setValue(tp, std::move(n_val));
         var_type = tp;
@@ -149,7 +153,7 @@ struct Var{
     private:
         rvalue value;
         std::string name;
-        Type var_type; 
+        Type var_type = Type::UNKNOWN; 
         friend std::ostream& operator<<(std::ostream& o, Var& var);
 
 };

@@ -15,7 +15,6 @@ name_(nm), drv(&driver) {
 
 void 
 Class::extendWithClasses(std::vector<Class>&& classes){
-    // base_classes_ = new std::vector<Class>();
     for(auto it = classes.begin(); it != classes.end(); ++it){        
             for(auto it2 = it->getProps().begin(); it2 != it->getProps().end(); ++it2){
                 if(properties_.find(it2->first) == properties_.end()){
@@ -24,5 +23,6 @@ Class::extendWithClasses(std::vector<Class>&& classes){
 
             }
     }
+    base_classes_ = new std::vector<Class>(std::move(classes));
     // *base_classes_ = std::move(classes);
 }
