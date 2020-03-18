@@ -18,6 +18,15 @@ StdLib::StdLib(Driver& drv) {
             vec.push_back(std::move(rv));
             var_vec.setValue(Type::OBJECT, vec);
         }),
+        new NativeMethod("reverse", Type::VOID, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
+            Var& var_vec = inst.getProp("vec");
+            auto vec = var_vec.getValue<std::vector<rvalue>>();
+            std::vector<rvalue> reversed;
+            for(auto it = vec.rbegin(); it != vec.rend(); ++it){
+                reversed.push_back(*it);
+            }
+            var_vec.setValue(Type::OBJECT, reversed);
+        }),
         new NativeMethod("remove", Type::VOID, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
             rvalue rv = r_args[0];
             if(rv.getType() != Type::INT){
@@ -35,6 +44,10 @@ StdLib::StdLib(Driver& drv) {
             int index = r_args[0].getValue<int>();
             Var& var_vec = inst.getProp("vec");
             auto vec = var_vec.getValue<std::vector<rvalue>>();
+            index = index < 0 ? (int)vec.size()+index : index;
+            if(index > (int)vec.size()){
+                throw ParserException("Index out of range");
+            }
             rvalue& element = vec[index];
             drv.setLastValue(rvalue(element));
         }),
