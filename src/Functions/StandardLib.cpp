@@ -64,6 +64,9 @@ StdLib::StdLib(Driver& drv) {
     functions.push_back(new NativeFunc("print", Type::INT, [](std::vector<rvalue>&& r_args, Driver& drv){
             std::cout << r_args[0] << std::endl;
         }));
+     functions.push_back(new NativeFunc("exit", Type::INT, [](std::vector<rvalue>&& r_args, Driver& drv){
+            std::exit(0);
+        }));
     functions.push_back(new NativeFunc("input", Type::INT, [](std::vector<rvalue>&& r_args, Driver& drv){
         if (r_args.size() > 0){
             if(r_args[0].getType() != Type::STRING){
