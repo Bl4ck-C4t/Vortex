@@ -82,7 +82,7 @@ result:
   %empty {}
   | result clause  { 
     if(!$2.isStatement()) {
-      drv.setLastValue(std::move($2)); if(drv.isPrintingLastValue()) std::cout << ">> " << drv.getLastValue() << '\n';
+      drv.setLastValue(std::move($2)); if(drv.isPrintingLastValue()) std::cout << "~> " << drv.getLastValue() << '\n';
     }
   }
   | result "ret" exp ";" {drv.setLastValue(std::move($3)); return 2;}

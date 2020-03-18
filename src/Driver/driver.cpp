@@ -276,18 +276,21 @@ std::ostream& operator<<(std::ostream& o, rvalue r){
                 Instance ins = r.getValue<Instance>();
                 if(ins.getClass().getName() == "vector"){
                     const std::vector<rvalue>& vec = ins.getProp("vec").getValue<std::vector<rvalue>>();
-                    std::cout << "[";
+                    o << "[";
                     for(int i = 0; i < vec.size(); i++){
-                        std::cout << vec[i];
+                        o << vec[i];
                         if(i < vec.size()-1){
-                            std::cout << ", ";
+                            o << ", ";
                         }
                     }
-                    std::cout << "]" << std::endl;
+                    o << "]";
 
                 }
-                res = "object";
-                o << res;
+                else{
+                    res = "object";
+                    o << res;
+
+                }
                 break;
             }
             
