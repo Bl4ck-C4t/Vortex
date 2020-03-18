@@ -43,6 +43,7 @@ Driver::evaluate(const char* body){
 
 int 
 Driver::parse(const std::string& f){
+  disableReturnPrint();
   file = f;
   location.initialize (&file);
   scan_begin ();

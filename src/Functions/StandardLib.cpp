@@ -44,7 +44,7 @@ StdLib::StdLib(Driver& drv) {
             drv.setLastValue(rvalue(Type::INT, (int)vec.size()));
         })
     };
-    Class vec = Class("vector",std::move(props), drv);
+    Class vec("vector",std::move(props), drv);
 
     classes.push_back(vec);
 

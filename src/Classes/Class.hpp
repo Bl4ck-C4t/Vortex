@@ -23,6 +23,7 @@ class Class{
       Class(std::string nm, std::vector<Var*>&& vec, Driver& driver);
 
      Class() {}
+     ~Class();
 
      void extendWithClasses(std::vector<Class>&& classes);
 

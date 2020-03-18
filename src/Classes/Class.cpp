@@ -26,3 +26,10 @@ Class::extendWithClasses(std::vector<Class>&& classes){
     base_classes_ = new std::vector<Class>(std::move(classes));
     // *base_classes_ = std::move(classes);
 }
+
+Class::~Class(){
+    // delete base_classes_;
+    for (auto it = properties_.begin(); it != properties_.end(); ++it) {
+        // delete properties_[it->first];
+    }
+}

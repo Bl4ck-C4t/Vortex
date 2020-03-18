@@ -47,6 +47,9 @@ class RefMap{
         bool contains(A& key) const{
             return mainMap_.count(key) > 0 || (refMap_ != nullptr && refMap_->contains(key) > 0);
         }
+    ~RefMap(){
+        // delete refMap_;
+    }
 };
 
 #endif
