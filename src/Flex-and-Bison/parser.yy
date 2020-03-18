@@ -180,7 +180,10 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "[" args "]" {Instance inst = $1.getValue<Instance>();
       inst.callMethod("atIndex", std::move($args), drv);  $$=drv.getLastValue();}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
-| exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();
+| exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();drv.setLastValue(std::move($1));
+      inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
+      
+| exp "." "." SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>().clone();drv.setLastValue(rvalue(Type::OBJECT,inst));
       inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
 | "new" SYMBOL "(" args ")" {$$=drv.makeInstance($SYMBOL, std::move($args));}
 | bool_exp 

@@ -16,10 +16,10 @@ Instance::getClass(){
 
 Var& 
 Instance::getProp(std::string name){
-    if(!properties_.contains(name)){
+    if(properties_.find(name) == properties_.end()){
         throw ParserException("No property with name '" + name + "'");
     }
-    Var& property = *(properties_.get(name));
+    Var& property = *(properties_[name]);
     return property;
 }
 
@@ -54,3 +54,14 @@ Instance::callMethod(std::string name, std::vector<rvalue>&& args, Driver& drv){
         break;
     }
 }
+
+Instance 
+Instance::clone(){
+    Instance new_inst(class_);
+    for(auto it = properties_.begin(); it != properties_.end(); ++it){
+        new_inst.properties_[it->first] = new Var(*(it->second));
+    }
+    return new_inst;
+}
+
+

@@ -8,10 +8,11 @@
 #include "Class.hpp"
 #include "../Driver/driver.hpp"
 #include "../Functions/NativeFunction.hpp"
+#include <map>
 
 class Instance{
     Class& class_;
-    RefMap<std::string, Var*> properties_;
+    std::map<std::string, Var*> properties_;
     public:
 
     Instance(Class& ref_class);
@@ -21,6 +22,8 @@ class Instance{
     void callMethod(std::string name, std::vector<rvalue>&& args, Driver& drv);
 
     Class& getClass();
+
+    Instance clone();
 };
 
 
