@@ -101,7 +101,7 @@ statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(new Function($2, $7, std::move($args_d), $body));}
 | "import" FILEPATH {drv.executeFile($2);}
 | "loop" "{" body "}" { while(true) { int res = drv.loop($body); if(res == 2){ break; } } }
-| "class" SYMBOL extend.opt bases "{" declarations "}" {Class sel_class($SYMBOL, std::move($declarations), drv);
+| "class" SYMBOL extend.opt bases "{" declarations.opt "}" {Class sel_class($SYMBOL, std::move($[declarations.opt]), drv);
   sel_class.extendWithClasses(std::move($bases));drv.declareClass(std::move(sel_class));}
 ;
 
@@ -122,9 +122,18 @@ declaration:
 ;
 
 %type <std::vector<Var*>> declarations;
-declarations: %empty {}
-| declaration {$$.push_back($declaration);}
+declarations: 
+  declaration {$$.push_back($declaration);}
 | declarations declaration {$1.push_back($declaration); $$=$1;}
+;
+
+
+%type <std::vector<Var*>> declarations.opt;
+declarations.opt: 
+  %empty {}
+| declarations {$$=$1;}
+;
+
 
 %type <std::string> body;
 body: 
@@ -156,10 +165,11 @@ arg: exp
 
 %left "==" ">" "<" ">=" "<=" "!=";
 %left "+" "-";
-%left "*" "/" "." "[";
+%left "*" "/" ".";
 %precedence SYMBOL;
-%right "=";
+%right "=" "[";
 %precedence NEG;
+
 
 %type <rvalue> exp;
 exp: INTEGER {$$=rvalue(Type::INT, $1);}
@@ -177,8 +187,8 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "/" exp {$$= $1 / $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
-| exp "[" args "]" {Instance inst = $1.getValue<Instance>();
-      inst.callMethod("atIndex", std::move($args), drv);  $$=drv.getLastValue();}
+| exp "[" exp "]" {Instance inst = $1.getValue<Instance>();
+      inst.callMethod("atIndex", {std::move($3)}, drv);  $$=drv.getLastValue();}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
 | exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();drv.setLastValue(std::move($1));
       inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
