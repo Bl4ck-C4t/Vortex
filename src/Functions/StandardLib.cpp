@@ -1,5 +1,6 @@
 #include "StandardLib.hpp"
 #include <iostream>
+#include <sstream>
 #include "../Variables/vars.hpp"
 
 StdLib::StdLib(Driver& drv) {
@@ -55,7 +56,23 @@ StdLib::StdLib(Driver& drv) {
             Var& var_vec = inst.getProp("vec");
             auto vec = var_vec.getValue<std::vector<rvalue>>();
             drv.setLastValue(rvalue(Type::INT, (int)vec.size()));
+        }),
+        new NativeMethod("toString", Type::INT, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
+            Var& var_vec = inst.getProp("vec");
+            auto vec = var_vec.getValue<std::vector<rvalue>>();
+            std::stringstream st;
+            st << "[";
+            for(auto it = vec.begin(); it != vec.end(); ++it){
+                st << *it;
+                if(it != vec.end() - 1){
+                    st << ", ";
+                }
+            }
+            st << "]";
+            drv.setLastValue(rvalue(Type::STRING, st.str()));
+            
         })
+
     };
     Class vec("vector",std::move(props), drv);
 
@@ -95,6 +112,14 @@ StdLib::StdLib(Driver& drv) {
             case Type::CHAR:
                 converted = std::to_string(r_args[0].getValue<char>());
                 break;
+
+            case Type::OBJECT:
+            {
+                Instance s = r_args[0].getValue<Instance>();
+                s.callMethod("toString", {}, drv);
+                converted = drv.getLastValue().getValue<std::string>();
+                break;
+            }
 
             default:
                 throw ParserException("Cannot convert to string type '" + typeToString(r_args[0].getType()) + "'");

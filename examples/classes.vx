@@ -8,6 +8,10 @@ class Person{
         ret;
     }
 
+    fn toString() -> string{
+        ret this.name;
+    }
+
     fn getAge() -> int{
         ret this.age;
     }
