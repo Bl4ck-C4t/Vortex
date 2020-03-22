@@ -101,6 +101,7 @@ statement:
   "fn" SYMBOL "(" args_d ")" "->" TYPE "{" body "}" {drv.declareFunction(new Function($2, $7, std::move($args_d), $body));}
 | "import" FILEPATH {drv.executeFile($2);}
 | "loop" "{" body "}" { while(true) { int res = drv.loop($body); if(res == 2){ break; } } }
+| if_stmnt {}
 | "class" SYMBOL extend.opt bases "{" declarations.opt "}" {Class sel_class($SYMBOL, std::move($[declarations.opt]), drv);
   sel_class.extendWithClasses(std::move($bases));drv.declareClass(std::move(sel_class));}
 ;
@@ -197,7 +198,6 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
       inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
 | "new" SYMBOL "(" args ")" {$$=drv.makeInstance($SYMBOL, std::move($args));}
 | bool_exp 
-| if_stmnt {$$=rvalue(Type::BOOL, $1);}
 ;
 
 %type <Var> lside;

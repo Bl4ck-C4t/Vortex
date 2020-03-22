@@ -120,14 +120,11 @@ TEST_CASE("Conditionals"){
         exec("int res = 5;");
         exec("if(2 > 1) { res = 10; }");
 
-        t_and_v_check(Type::BOOL, true);
 
         exec("res");
         t_and_v_check(Type::INT, 10);
 
         exec("15 if (2**2 - 3 > 5) { res = 20; } else { res = 35; }");
-
-        t_and_v_check(Type::BOOL, false);
 
         exec("res");
         t_and_v_check(Type::INT, 35);
