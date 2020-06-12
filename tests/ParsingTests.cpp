@@ -207,6 +207,12 @@ TEST_CASE("Vectors"){
         t_and_v_check(Type::INT, 100);
         exec("a[4]");
         t_and_v_check(Type::CHAR, 'c');
+        exec("a[4] = 200;");
+        exec("a[4]");
+        t_and_v_check(Type::INT, 200);
+        exec("a[1] = 'j';");
+        exec("a[1]");
+        t_and_v_check(Type::CHAR, 'j');
     }
 
     SECTION("Methods"){

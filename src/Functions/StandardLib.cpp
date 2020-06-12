@@ -38,6 +38,18 @@ StdLib::StdLib(Driver& drv) {
             vec.erase(vec.begin() + rv.getValue<int>());
             var_vec.setValue(Type::OBJECT, vec);
         }),
+        new NativeMethod("insert", Type::VOID, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
+            int index = r_args[0].getValue<int>();
+            rvalue val = r_args[1];            
+            Var& var_vec = inst.getProp("vec");
+            auto vec = var_vec.getValue<std::vector<rvalue>>();
+            index = index < 0 ? (int)vec.size()+index : index;
+            if(index > (int)vec.size()){
+                throw ParserException("Index out of range");
+            }
+            vec.insert(vec.begin()+index, val);
+            var_vec.setValue(Type::OBJECT, vec);
+        }),
         new NativeMethod("atIndex", Type::OBJECT, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
              if(r_args[0].getType() != Type::INT){
                 throw WrongTypeException(r_args[0].getType(), Type::INT);

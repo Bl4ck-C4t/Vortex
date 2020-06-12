@@ -191,7 +191,10 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "[" exp "]" {Instance inst = $1.getValue<Instance>();
       inst.callMethod("atIndex", {std::move($3)}, drv);  $$=drv.getLastValue();}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
-| exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>();drv.setLastValue(std::move($1));
+| exp "[" exp "]" "=" exp ";"{Instance inst = $1.getValue<Instance>(); inst.callMethod("remove", {$3}, drv);
+  inst.callMethod("insert", {std::move($3), $6}, drv); $$=$6;}
+  
+| exp "."  SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>(); drv.setLastValue(std::move($1));
       inst.callMethod($SYMBOL, std::move($args), drv); $$=drv.getLastValue();}
       
 | exp "." "." SYMBOL "(" args ")"  {Instance inst = $1.getValue<Instance>().clone();drv.setLastValue(rvalue(Type::OBJECT,inst));
