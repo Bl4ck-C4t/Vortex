@@ -66,6 +66,17 @@ TEST_CASE("Test variable creation"){
 
         CHECK(drv.getLastValue().getValue<int>() == 3);
 
+        exec("any v1 = 10;");
+
+        CHECK(drv.getLastValue().getValue<int>() == 10);
+        CHECK(drv.getVariable("v1").getType() == Type::ANY);
+
+        exec("v1 = \"testing\";");
+
+        CHECK(drv.getLastValue().getValue<string>() == "testing");
+        CHECK(drv.getVariable("v1").getType() == Type::ANY);
+
+
         exec("b = 6;");
 
         CHECK(drv.getLastValue().getValue<int>() == 6);
@@ -102,11 +113,11 @@ TEST_CASE("Test variable creation"){
          exec("1.2 - 0.2");
         t_and_v_check(Type::FLOAT, 1.0f);
 
-         exec("\"help \" + \"me\"");
-        t_and_v_check(Type::STRING, std::string("help me"));
+         exec("\"hello \" + \"world\"");
+        t_and_v_check(Type::STRING, std::string("hello world"));
 
-         exec("\" i luv \" + 'u'");
-        t_and_v_check(Type::STRING, std::string(" i luv u"));
+         exec("\" strin\" + 'g'");
+        t_and_v_check(Type::STRING, std::string(" string"));
 
     }
 
@@ -185,9 +196,9 @@ TEST_CASE("Vectors"){
         exec("[]");
         type_checker(Type::OBJECT);
 
-        exec("a = [\"help\", true, 3.4, 100, 'c'];");
+        exec("a = [\"str\", true, 3.4, 100, 'c'];");
         exec("a[0]");
-        t_and_v_check(Type::STRING, std::string("help"));
+        t_and_v_check(Type::STRING, std::string("str"));
         exec("a[1]");
         t_and_v_check(Type::BOOL, true);
         exec("a[2]");
@@ -202,7 +213,7 @@ TEST_CASE("Vectors"){
         exec("[].len()");
         t_and_v_check(Type::INT, 0);
 
-         exec("a = [\"help\", true, 3.4, 100, 'c'];");
+         exec("a = [\"str\", true, 3.4, 100, 'c'];");
 
          exec("a.len()");
          t_and_v_check(Type::INT, 5);
@@ -236,16 +247,16 @@ TEST_CASE("Classes"){
     SECTION("Instances test"){
         drv.executeFile("/home/blackcat/school/Vortex/tests/TestFiles/classes.vx");
 
-        exec("chorbi = new God(20, \"Chorbi\", [\"Programming\", \"Reading documentation\"]);");
+        exec("god1 = new God(20, \"god1\", [\"Programming\", \"Reading documentation\"]);");
         type_checker(Type::OBJECT);
-        exec("chorbi.getName()");
-        t_and_v_check(Type::STRING, std::string("Chorbi"));
-        exec("chorbi.getPowers()[0]");
+        exec("god1.getName()");
+        t_and_v_check(Type::STRING, std::string("god1"));
+        exec("god1.getPowers()[0]");
         t_and_v_check(Type::STRING, std::string("Programming"));
 
-        exec("stefo = new Person(18, \"Stefan\");");
+        exec("stefan = new Person(18, \"Stefan\");");
         type_checker(Type::OBJECT);
-        exec("stefo.getAge()");
+        exec("stefan.getAge()");
         t_and_v_check(Type::INT, 18);
 
     }

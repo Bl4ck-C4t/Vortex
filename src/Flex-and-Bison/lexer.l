@@ -46,6 +46,7 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 "float"    return yy::parser::make_TYPE            (Type::FLOAT, loc);
 "bool"     return yy::parser::make_TYPE            (Type::BOOL, loc);
 "void"     return yy::parser::make_TYPE            (Type::VOID, loc);
+"any"      return yy::parser::make_TYPE            (Type::ANY, loc);
 "object"   return yy::parser::make_TYPE            (Type::OBJECT, loc);
 
 "if"       return yy::parser::make_IF              (loc);

@@ -57,6 +57,9 @@ Driver::parse(const std::string& f){
 void 
 Driver::executeFile(std::string filename){
     std::ifstream t(filename);
+    if(t.fail()){
+        throw ParserException("File '" + filename +"' does not exist.");
+    }
     std::stringstream buffer;
     buffer << t.rdbuf();
     evaluate(buffer.str().c_str());
@@ -208,7 +211,8 @@ Driver::setVariable(Var&& var){
 //   std::cout << "setting variable" << std::endl;
   const rvalue& val = var.getValue();
   auto& variables = getScope().variables;
-  if(var.getType() != val.getType()){
+  
+  if(var.getType() != val.getType() && var.getType() != Type::ANY){
       location.end.column--;
     throw IncorrectTypesException("Value type incorrect", var.getType(), val.getType());
   }
