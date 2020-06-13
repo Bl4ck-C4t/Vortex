@@ -190,8 +190,18 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | exp "/" exp {$$= $1 / $3;}
 | "-" exp %prec NEG {$$= -$2;}
 | SYMBOL "(" args ")" {drv.callFunction($1, std::move($args)); $$=drv.getLastValue();}
-| exp "[" exp "]" {Instance inst = $1.getValue<Instance>();
-      inst.callMethod("atIndex", {std::move($3)}, drv);  $$=drv.getLastValue();}
+| exp "[" exp "]" {
+      if($1.getType() != Type::OBJECT){
+          if($1.getType() == Type::STRING){
+              $$=rvalue(Type::CHAR, $1.getValue<std::string>()[$3.getValue<int>()]);
+          }
+          else{
+            throw new IncorrectTypesException("No index operator for", Type::STRING, $1.getType());
+          }
+      }
+      else{
+        Instance inst = $1.getValue<Instance>();
+        inst.callMethod("atIndex", {std::move($3)}, drv);  $$=drv.getLastValue();}}
 | "[" args "]" {$$=drv.makeVector(std::move($args));}
 | exp "[" exp "]" "=" exp ";"{Instance inst = $1.getValue<Instance>(); inst.callMethod("remove", {$3}, drv);
   inst.callMethod("insert", {std::move($3), $6}, drv); $$=$6;}

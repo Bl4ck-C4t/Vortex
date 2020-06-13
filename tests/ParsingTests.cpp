@@ -116,8 +116,17 @@ TEST_CASE("Test variable creation"){
          exec("\"hello \" + \"world\"");
         t_and_v_check(Type::STRING, std::string("hello world"));
 
-         exec("\" strin\" + 'g'");
+        exec("\" strin\" + 'g'");
         t_and_v_check(Type::STRING, std::string(" string"));
+
+        exec("\"testing\"[0]");
+        t_and_v_check(Type::CHAR, 't');
+
+        exec("\"testing\"[1]");
+        t_and_v_check(Type::CHAR, 'e');
+
+        exec("\"testing\"[2]");
+        t_and_v_check(Type::CHAR, 's');
 
     }
 
