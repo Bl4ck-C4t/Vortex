@@ -63,6 +63,7 @@ class FunctionCall {
 
     void setFunctionRef(Scope& r_scope){
         MainScope.functions.setMap(&r_scope.functions);
+        MainScope.classes.setMap(&r_scope.classes);
         // MainScope.variables.setMap(&r_scope.variables);
 
     }
@@ -70,6 +71,7 @@ class FunctionCall {
     void setFullRef(Scope& r_scope){
         MainScope.functions.setMap(&r_scope.functions);
         MainScope.variables.setMap(&r_scope.variables);
+        MainScope.classes.setMap(&r_scope.classes);
 
     }
 

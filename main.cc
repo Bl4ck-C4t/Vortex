@@ -3,7 +3,7 @@
 #include "src/Variables/vars.hpp"
 int main(int argc, char *argv[]){
     Driver drv;
-    int res;
+    int res = 0;
     for (int i = 1; i < argc; ++i)
     if (argv[i] == std::string ("-p"))
       drv.enableParserDebugMode();
@@ -21,10 +21,10 @@ int main(int argc, char *argv[]){
       catch(ParserException p){
         auto par = drv.createParser();
         par.error(drv.grabLocation(), p.getMessage());
-
+        res = 1;
       }
       // drv.parse("-");
-      res = 1;
+      
     }
   return res;
 }

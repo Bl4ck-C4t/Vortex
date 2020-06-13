@@ -108,7 +108,7 @@ path (([[:alnum:]_\/\.]+)?\/)*([[:alnum:]_]+\.vx)
 [0-9]+ return yy::parser::make_INTEGER(atoi(yytext), loc);
 
 {string_v1} |
-{string_v2} { /* " help \" me \" from " */
+{string_v2} {
   if(yytext[yyleng-2] == '\\'){
     yyless(yyleng-1);
     yymore();
