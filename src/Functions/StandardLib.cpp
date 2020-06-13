@@ -13,6 +13,9 @@ StdLib::StdLib(Driver& drv) {
             vec.setValue(Type::OBJECT, rv.getValue<std::vector<rvalue>>());
         }),
         new NativeMethod("push", Type::VOID, [](std::vector<rvalue>&& r_args, Instance& inst, Driver& drv){
+            if(r_args.size() == 0){
+                throw TooFewArguments(1, 0);
+            }
             rvalue rv = r_args[0];
             Var& var_vec = inst.getProp("vec");
             auto vec = var_vec.getValue<std::vector<rvalue>>();
@@ -58,7 +61,7 @@ StdLib::StdLib(Driver& drv) {
             Var& var_vec = inst.getProp("vec");
             auto vec = var_vec.getValue<std::vector<rvalue>>();
             index = index < 0 ? (int)vec.size()+index : index;
-            if(index > (int)vec.size()){
+            if(index >= (int)vec.size()){
                 throw ParserException("Index out of range");
             }
             rvalue& element = vec[index];

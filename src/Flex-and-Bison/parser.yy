@@ -177,7 +177,9 @@ exp: INTEGER {$$=rvalue(Type::INT, $1);}
 | STRING {$$=rvalue(Type::STRING, $1);}
 | FLOAT {$$=rvalue(Type::FLOAT, $1);}
 | CHAR {$$=rvalue(Type::CHAR, $1);}
-| lside {$$=$lside.getValue();}
+| lside {if($lside.getType() == Type::UNKNOWN) { 
+  $$=drv.getVariable($lside.getName()).getValue();} 
+  else {$$=$lside.getValue();}}
 | lside "=" exp ";" {$lside.setValue(rvalue($3));if($lside.getType() == Type::UNKNOWN) {$lside.setType($3.getType());}
   drv.setVariable(std::move($lside)); $$=std::move($3);}
 | exp "." SYMBOL "=" exp ";" {Instance inst = $1.getValue<Instance>(); inst.getProp($SYMBOL).setValue(rvalue($5)); $$=std::move($5);}
