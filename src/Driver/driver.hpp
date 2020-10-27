@@ -76,7 +76,7 @@ public:
   int evaluate(const char* body);
 
   Scope& getScope(){
-      callStack_.top().getScope();
+      return callStack_.top().getScope();
   }
 
   yy::location& grabLocation() {

@@ -156,7 +156,7 @@ TEST_CASE("Functions"){
     auto exec = generateExecutor(drv);
     const auto& [type_checker, value_checker, t_and_v_check] = generateValueCheckers(drv);
     SECTION("Declare and run"){
-        drv.executeFile("/home/blackcat/school/Vortex/tests/TestFiles/function_declare.vx");
+        CHECK_NOTHROW(drv.executeFile("tests/TestFiles/function_declare.vx"));
 
         exec("f1(3, 2)");
 
@@ -174,7 +174,7 @@ TEST_CASE("Functions"){
     }
 
     SECTION("Recursion and ifs"){
-        drv.executeFile("/home/blackcat/school/Vortex/tests/TestFiles/function_declare.vx");
+        CHECK_NOTHROW(drv.executeFile("tests/TestFiles/function_declare.vx"));
 
         exec("max(3, 5)");
 
@@ -255,12 +255,12 @@ TEST_CASE("Classes"){
     auto exec = generateExecutor(drv);
     const auto& [type_checker, value_checker, t_and_v_check] = generateValueCheckers(drv);
     SECTION("Declaration with extending"){
-        drv.executeFile("/home/blackcat/school/Vortex/tests/TestFiles/classes.vx");
+        CHECK_NOTHROW(drv.executeFile("tests/TestFiles/classes.vx"));
 
     }
 
     SECTION("Instances test"){
-        drv.executeFile("/home/blackcat/school/Vortex/tests/TestFiles/classes.vx");
+        CHECK_NOTHROW(drv.executeFile("tests/TestFiles/classes.vx"));
 
         exec("god1 = new God(20, \"god1\", [\"Programming\", \"Reading documentation\"]);");
         type_checker(Type::OBJECT);
