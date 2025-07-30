@@ -141,7 +141,5 @@ loop{
 }
 ```
 
-Using the interpreter
-The interpreter has 2 modes of operation: Reading and executing from a file and interpretive mode. To enter interpretive mode, use: “vortex -”, and to execute a file: “vortex <filename>”
-Изпращане на отзиви
-Налице са резултати за превод
+## Using the interpreter
+The interpreter has 2 modes of operation: Reading and executing from a file and interpretive mode. To enter interpretive mode, use: `vortex -`, and to execute a file: `vortex <filename>`
